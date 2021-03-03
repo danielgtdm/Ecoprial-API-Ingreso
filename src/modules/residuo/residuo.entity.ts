@@ -39,7 +39,9 @@ export class Residuo extends BaseEntity {
   @Column({ type: 'double', nullable: false })
   tds: number;
 
-  @ManyToOne(() => TipoResiduo, (tipoResiduo) => tipoResiduo.Residuos)
+  @ManyToOne(() => TipoResiduo, (tipoResiduo) => tipoResiduo.Residuos, {
+    eager: true,
+  })
   TipoResiduo: TipoResiduo;
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })

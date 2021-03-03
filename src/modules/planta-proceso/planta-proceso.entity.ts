@@ -5,8 +5,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToMany,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 import { Generador } from '../generador/generador.entity';
@@ -17,31 +17,12 @@ export class PlantaProceso extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'double', nullable: false })
-  cantidad: number;
+  @Column({ type: 'varchar', nullable: false })
+  nombre: number;
 
-  @Column({ type: 'integer', nullable: false })
-  celda: number;
-
-  @Column({ type: 'double', nullable: false })
-  humedad: number;
-
-  @Column({ type: 'double', nullable: false })
-  pH: number;
-
-  @Column({ type: 'double', nullable: false })
-  temperatura: number;
-
-  @Column({ type: 'double', nullable: false })
-  conductividad_electrica: number;
-
-  @Column({ type: 'double', nullable: false })
-  salinidad: number;
-
-  @Column({ type: 'double', nullable: false })
-  tds: number;
-
-  @ManyToOne(() => Generador, (generador) => generador.PlantasProceso)
+  @ManyToOne(() => Generador, (generador) => generador.PlantasProceso, {
+    eager: true,
+  })
   Generador: Generador;
 
   @OneToMany(() => Ingreso, (ingreso) => ingreso.PlantaProceso)

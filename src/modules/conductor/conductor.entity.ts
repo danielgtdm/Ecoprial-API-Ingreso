@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
+import { Ingreso } from '../ingreso/ingreso.entity';
 import { Transportista } from '../transportista/transportista.entity';
 @Entity('conductor')
 export class Conductor extends BaseEntity {
@@ -18,10 +19,13 @@ export class Conductor extends BaseEntity {
   nombre: string;
 
   @Column({ type: 'varchar', nullable: false })
-  rut: string;
+  apellido: string;
 
   @ManyToOne(() => Transportista, (transportista) => transportista.Conductores)
   Transportista: Transportista;
+
+  @OneToMany(() => Ingreso, (ingreso) => ingreso.Conductor)
+  Ingresos: Ingreso[];
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;

@@ -11,6 +11,8 @@ import {
 } from 'typeorm';
 import { Residuo } from '../residuo/residuo.entity';
 import { PlantaProceso } from '../planta-proceso/planta-proceso.entity';
+import { Vehiculo } from '../vehiculo/vehiculo.entity';
+import { Conductor } from '../conductor/conductor.entity';
 @Entity('ingreso')
 export class Ingreso extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
@@ -28,12 +30,22 @@ export class Ingreso extends BaseEntity {
   @Column({ type: 'integer', nullable: false })
   nro_report: number;
 
-  @ManyToOne(() => PlantaProceso, (plantaProceso) => plantaProceso.Ingresos)
+  @ManyToOne(() => PlantaProceso, (plantaProceso) => plantaProceso.Ingresos, {
+    eager: true,
+  })
   PlantaProceso: PlantaProceso;
 
-  @OneToOne(() => Residuo)
+  @OneToOne(() => Residuo, { eager: true })
   @JoinColumn()
   Residuo: Residuo;
+
+  @ManyToOne(() => Vehiculo, (vehiculo) => vehiculo.Ingresos, { eager: true })
+  Vehiculo: Vehiculo;
+
+  @ManyToOne(() => Conductor, (conductor) => conductor.Ingresos, {
+    eager: true,
+  })
+  Conductor: Conductor;
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;
