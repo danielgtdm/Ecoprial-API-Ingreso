@@ -8,8 +8,10 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Conductor } from '../conductor/conductor.entity';
+import { Ingreso } from '../ingreso/ingreso.entity';
 import { Transportista } from '../transportista/transportista.entity';
 @Entity('vehiculo')
 export class Vehiculo extends BaseEntity {
@@ -19,15 +21,17 @@ export class Vehiculo extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   patente: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  rut: string;
-
-  @ManyToOne(() => Transportista, (transportista) => transportista.Vehiculos)
+  @ManyToOne(() => Transportista, (transportista) => transportista.Vehiculos, {
+    eager: true,
+  })
   Transportista: Transportista;
 
   @ManyToMany(() => Conductor)
   @JoinTable()
   Conductores: Conductor[];
+
+  @OneToMany(() => Ingreso, (ingreso) => ingreso.Vehiculo)
+  Ingresos: Ingreso[];
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;

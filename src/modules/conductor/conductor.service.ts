@@ -1,4 +1,68 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Conductor } from './conductor.entity';
+import { ConductorRepository } from './conductor.repository';
+import { status } from '../../shared/entity-status.enum';
+import { TransportistaService } from '../transportista/transportista.service';
+import { Transportista } from '../transportista/transportista.entity';
 
 @Injectable()
-export class ConductorService {}
+export class ConductorService {
+  constructor(
+    @InjectRepository(ConductorRepository)
+    private readonly _conductorRepository: ConductorRepository,
+    private readonly _transportistaService: TransportistaService,
+  ) {}
+
+  async get(id: number): Promise<Conductor> {
+    if (!id) {
+      throw new BadRequestException();
+    }
+
+    const conductor: Conductor = await this._conductorRepository.findOne(id, {
+      where: { status: status.ACTIVE },
+    });
+
+    if (!conductor) {
+      throw new NotFoundException();
+    }
+
+    return conductor;
+  }
+
+  async getAll(): Promise<Conductor[]> {
+    const conductores: Conductor[] = await this._conductorRepository.find({
+      where: { status: status.ACTIVE },
+    });
+
+    return conductores;
+  }
+
+  async create(
+    conductor: Conductor,
+    transportistaId: number,
+  ): Promise<Conductor> {
+    const transportista: Transportista = await this._transportistaService.get(
+      transportistaId,
+    );
+
+    conductor.Transportista = transportista;
+
+    const createdConductor: Conductor = await this._conductorRepository.save(
+      conductor,
+    );
+    return createdConductor;
+  }
+
+  async update(id: number, conductor: Conductor): Promise<void> {
+    await this._conductorRepository.update(id, conductor);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this._conductorRepository.update(id, { status: status.INACTIVE });
+  }
+}
