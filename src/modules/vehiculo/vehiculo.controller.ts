@@ -21,16 +21,16 @@ export class VehiculoController {
     private readonly _auditoriaService: AuditoriaService,
   ) {}
 
-  @Get('auditoria')
-  async getAllAuditorias(): Promise<VehiculoAuditoria[]> {
-    return await this._auditoriaService.getAll();
-  }
-
   @Get('auditoria/:vehiculoId')
   async getAuditoriasVehiculo(
     @Param('vehiculoId', ParseIntPipe) vehiculoId: number,
   ): Promise<VehiculoAuditoria[]> {
     return await this._auditoriaService.get(vehiculoId);
+  }
+
+  @Get('auditoria')
+  async getAllAuditorias(): Promise<VehiculoAuditoria[]> {
+    return await this._auditoriaService.getAll();
   }
 
   @Get(':id')
