@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConductorAuditoriaService } from './conductor-auditoria.service';
+import { ConductorAuditoriaService } from '../conductor-auditoria.service';
 
 describe('AuditoriaService', () => {
   let service: ConductorAuditoriaService;
