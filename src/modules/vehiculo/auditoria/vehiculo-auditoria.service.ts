@@ -4,14 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuditoriaRepository } from './auditoria.repository';
-import { VehiculoAuditoria } from './auditoria.entity';
+import { VehiculoAuditoriaRepository } from './auditoria.repository';
+import { VehiculoAuditoria } from './vehiculo-auditoria.entity';
 
 @Injectable()
-export class AuditoriaService {
+export class VehiculoAuditoriaService {
   constructor(
-    @InjectRepository(AuditoriaRepository)
-    private readonly _auditoriaRepository: AuditoriaRepository,
+    @InjectRepository(VehiculoAuditoriaRepository)
+    private readonly _vehiculoAuditoriaRepository: VehiculoAuditoriaRepository,
   ) {}
 
   async get(vehiculoId: number): Promise<VehiculoAuditoria[]> {
@@ -19,7 +19,7 @@ export class AuditoriaService {
       throw new BadRequestException();
     }
 
-    const auditorias: VehiculoAuditoria[] = await this._auditoriaRepository.find(
+    const auditorias: VehiculoAuditoria[] = await this._vehiculoAuditoriaRepository.find(
       { where: { id_Vehiculo: vehiculoId } },
     );
 
@@ -31,7 +31,7 @@ export class AuditoriaService {
   }
 
   async getAll(): Promise<VehiculoAuditoria[]> {
-    const vehiculos: VehiculoAuditoria[] = await this._auditoriaRepository.find();
+    const vehiculos: VehiculoAuditoria[] = await this._vehiculoAuditoriaRepository.find();
 
     return vehiculos;
   }

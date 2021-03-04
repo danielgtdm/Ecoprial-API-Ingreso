@@ -5,7 +5,7 @@ import {
 } from 'typeorm';
 
 import { Vehiculo } from '../vehiculo.entity';
-import { VehiculoAuditoria } from './auditoria.entity';
+import { VehiculoAuditoria } from './vehiculo-auditoria.entity';
 
 @EventSubscriber()
 export class VehiculoSubscriber implements EntitySubscriberInterface<Vehiculo> {
