@@ -22,6 +22,7 @@ import { ResiduoService } from '../residuo/residuo.service';
 import { ResiduoModule } from '../residuo/residuo.module';
 
 import { TipoResiduoModule } from '../tipo-residuo/tipo-residuo.module';
+import { IngresoAuditoriaModule } from './ingreso-auditoria/ingreso-auditoria.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TipoResiduoModule } from '../tipo-residuo/tipo-residuo.module';
     TransportistaModule,
     ResiduoModule,
     TipoResiduoModule,
+    IngresoAuditoriaModule,
   ],
   controllers: [IngresoController],
   providers: [

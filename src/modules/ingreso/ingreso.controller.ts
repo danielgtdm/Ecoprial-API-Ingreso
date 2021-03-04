@@ -11,10 +11,27 @@ import {
 
 import { IngresoService } from './ingreso.service';
 import { Ingreso } from './ingreso.entity';
+import { IngresoAuditoriaService } from './ingreso-auditoria/ingreso-auditoria.service';
+import { IngresoAuditoria } from './ingreso-auditoria/ingreso-auditoria.entity';
 
 @Controller('ingreso')
 export class IngresoController {
-  constructor(private readonly _ingresoService: IngresoService) {}
+  constructor(
+    private readonly _ingresoService: IngresoService,
+    private readonly _ingresoAuditoriaService: IngresoAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:ingresoId')
+  async getAuditoriasIngreso(
+    @Param('ingresoId', ParseIntPipe) ingresoId: number,
+  ): Promise<IngresoAuditoria[]> {
+    return await this._ingresoAuditoriaService.get(ingresoId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<IngresoAuditoria[]> {
+    return await this._ingresoAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Ingreso> {
