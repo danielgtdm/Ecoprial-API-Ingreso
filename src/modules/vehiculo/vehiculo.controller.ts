@@ -9,10 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { VehiculoAuditoriaService } from './auditoria/vehiculo-auditoria.service';
+import { VehiculoAuditoriaService } from './vehiculo-auditoria/vehiculo-auditoria.service';
 import { VehiculoService } from './vehiculo.service';
 import { Vehiculo } from './vehiculo.entity';
-import { VehiculoAuditoria } from './auditoria/vehiculo-auditoria.entity';
+import { VehiculoAuditoria } from './vehiculo-auditoria/vehiculo-auditoria.entity';
 
 @Controller('vehiculo')
 export class VehiculoController {

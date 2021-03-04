@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehiculoRepository } from './vehiculo.repository';
 
 import { TransportistaModule } from '../transportista/transportista.module';
-import { VehiculoAuditoriaModule } from './auditoria/vehiculo-auditoria.module';
+import { VehiculoAuditoriaModule } from './vehiculo-auditoria/vehiculo-auditoria.module';
 
 @Module({
   imports: [

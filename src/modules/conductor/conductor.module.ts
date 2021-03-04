@@ -5,7 +5,7 @@ import { TransportistaService } from '../transportista/transportista.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConductorRepository } from './conductor.repository';
 import { TransportistaRepository } from '../transportista/transportista.repository';
-import { ConductorAuditoriaModule } from './auditoria/conductor-auditoria.module';
+import { ConductorAuditoriaModule } from './conductor-auditoria/conductor-auditoria.module';
 
 @Module({
   imports: [

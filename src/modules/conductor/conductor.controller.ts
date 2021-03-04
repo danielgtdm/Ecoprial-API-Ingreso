@@ -8,11 +8,11 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ConductorAuditoria } from './auditoria/conductor-auditoria.entity';
+import { ConductorAuditoria } from './conductor-auditoria/conductor-auditoria.entity';
 import { Conductor } from './conductor.entity';
 import { ConductorService } from './conductor.service';
 
-import { ConductorAuditoriaService } from './auditoria/conductor-auditoria.service';
+import { ConductorAuditoriaService } from './conductor-auditoria/conductor-auditoria.service';
 
 @Controller('conductor')
 export class ConductorController {
