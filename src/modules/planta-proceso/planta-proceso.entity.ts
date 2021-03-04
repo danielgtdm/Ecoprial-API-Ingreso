@@ -18,7 +18,7 @@ export class PlantaProceso extends BaseEntity {
   id: number;
 
   @Column({ type: 'varchar', nullable: false })
-  nombre: number;
+  nombre: string;
 
   @ManyToOne(() => Generador, (generador) => generador.PlantasProceso, {
     eager: true,
