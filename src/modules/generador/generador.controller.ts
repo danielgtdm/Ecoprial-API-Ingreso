@@ -11,10 +11,27 @@ import {
 
 import { GeneradorService } from './generador.service';
 import { Generador } from './generador.entity';
+import { GeneradorAuditoriaService } from './generador-auditoria/generador-auditoria.service';
+import { GeneradorAuditoria } from './generador-auditoria/generador-auditoria.entity';
 
 @Controller('generador')
 export class GeneradorController {
-  constructor(private readonly _generadorService: GeneradorService) {}
+  constructor(
+    private readonly _generadorService: GeneradorService,
+    private readonly _generadorAuditoriaService: GeneradorAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:generadorId')
+  async getAuditoriasGenerador(
+    @Param('generadorId', ParseIntPipe) generadorId: number,
+  ): Promise<GeneradorAuditoria[]> {
+    return await this._generadorAuditoriaService.get(generadorId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<GeneradorAuditoria[]> {
+    return await this._generadorAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Generador> {
