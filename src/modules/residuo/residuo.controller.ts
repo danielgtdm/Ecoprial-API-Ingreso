@@ -11,10 +11,27 @@ import {
 
 import { ResiduoService } from './residuo.service';
 import { Residuo } from './residuo.entity';
+import { ResiduoAuditoriaService } from './residuo-auditoria/residuo-auditoria.service';
+import { ResiduoAuditoria } from './residuo-auditoria/residuo-auditoria.entity';
 
 @Controller('residuo')
 export class ResiduoController {
-  constructor(private readonly _residuoService: ResiduoService) {}
+  constructor(
+    private readonly _residuoService: ResiduoService,
+    private readonly _residuoAuditoriaService: ResiduoAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:residuoId')
+  async getAuditoriasResiduo(
+    @Param('residuoId', ParseIntPipe) residuoId: number,
+  ): Promise<ResiduoAuditoria[]> {
+    return await this._residuoAuditoriaService.get(residuoId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<ResiduoAuditoria[]> {
+    return await this._residuoAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Residuo> {
