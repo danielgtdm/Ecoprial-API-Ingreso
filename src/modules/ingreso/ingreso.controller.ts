@@ -62,8 +62,12 @@ export class IngresoController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() ingreso: Ingreso,
-  ): Promise<void> {}
+  ): Promise<void> {
+    return await this._ingresoService.update(id, ingreso);
+  }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {}
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return await this._ingresoService.delete(id);
+  }
 }

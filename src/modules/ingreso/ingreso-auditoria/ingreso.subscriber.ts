@@ -1,6 +1,7 @@
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  InsertEvent,
   UpdateEvent,
 } from 'typeorm';
 import { Ingreso } from '../ingreso.entity';
@@ -29,4 +30,6 @@ export class IngresoSubscriber implements EntitySubscriberInterface<Ingreso> {
 
     await event.manager.save(IngresoAuditoria, ingreso_auditoria);
   }
+
+  async afterInsert(event: InsertEvent<Ingreso>) {}
 }
