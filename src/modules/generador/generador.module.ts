@@ -3,9 +3,10 @@ import { GeneradorController } from './generador.controller';
 import { GeneradorService } from './generador.service';
 import { GeneradorRepository } from './generador.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GeneradorAuditoriaModule } from './generador-auditoria/generador-auditoria.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GeneradorRepository])],
+  imports: [TypeOrmModule.forFeature([GeneradorRepository]), GeneradorAuditoriaModule],
   controllers: [GeneradorController],
   providers: [GeneradorService],
   exports: [GeneradorService],

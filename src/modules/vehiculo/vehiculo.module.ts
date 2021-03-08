@@ -4,17 +4,17 @@ import { VehiculoService } from './vehiculo.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehiculoRepository } from './vehiculo.repository';
 
-import { TransportistaRepository } from '../transportista/transportista.repository';
-import { TransportistaService } from '../transportista/transportista.service';
 import { TransportistaModule } from '../transportista/transportista.module';
+import { VehiculoAuditoriaModule } from './vehiculo-auditoria/vehiculo-auditoria.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([VehiculoRepository, TransportistaRepository]),
+    TypeOrmModule.forFeature([VehiculoRepository]),
     TransportistaModule,
+    VehiculoAuditoriaModule,
   ],
   controllers: [VehiculoController],
-  providers: [VehiculoService, TransportistaService],
+  providers: [VehiculoService],
   exports: [VehiculoService],
 })
 export class VehiculoModule {}

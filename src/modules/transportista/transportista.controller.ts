@@ -11,10 +11,27 @@ import {
 
 import { TransportistaService } from './transportista.service';
 import { Transportista } from './transportista.entity';
+import { TransportistaAuditoriaService } from './transportista-auditoria/transportista-auditoria.service';
+import { TransportistaAuditoria } from './transportista-auditoria/transportista-auditoria.entity';
 
 @Controller('transportista')
 export class TransportistaController {
-  constructor(private readonly _transportistaService: TransportistaService) {}
+  constructor(
+    private readonly _transportistaService: TransportistaService,
+    private readonly _transportistaAuditoriaService: TransportistaAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:transportistaId')
+  async getAuditoriasTransportista(
+    @Param('transportistaId', ParseIntPipe) transportistaId: number,
+  ): Promise<TransportistaAuditoria[]> {
+    return await this._transportistaAuditoriaService.get(transportistaId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<TransportistaAuditoria[]> {
+    return await this._transportistaAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Transportista> {

@@ -8,12 +8,30 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ConductorAuditoria } from './conductor-auditoria/conductor-auditoria.entity';
 import { Conductor } from './conductor.entity';
 import { ConductorService } from './conductor.service';
 
+import { ConductorAuditoriaService } from './conductor-auditoria/conductor-auditoria.service';
+
 @Controller('conductor')
 export class ConductorController {
-  constructor(private readonly _conductorService: ConductorService) {}
+  constructor(
+    private readonly _conductorService: ConductorService,
+    private readonly _conductorAuditoriaService: ConductorAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:conductorId')
+  async getAuditoriasConductor(
+    @Param('conductorId', ParseIntPipe) conductorId: number,
+  ): Promise<ConductorAuditoria[]> {
+    return await this._conductorAuditoriaService.get(conductorId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<ConductorAuditoria[]> {
+    return await this._conductorAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Conductor> {

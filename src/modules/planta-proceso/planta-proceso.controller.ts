@@ -11,10 +11,27 @@ import {
 
 import { PlantaProcesoService } from './planta-proceso.service';
 import { PlantaProceso } from './planta-proceso.entity';
+import { PlantaProcesoAuditoriaService } from './planta-proceso-auditoria/planta-proceso-auditoria.service';
+import { PlantaProcesoAuditoria } from './planta-proceso-auditoria/planta-proceso-auditoria.entity';
 
 @Controller('planta-proceso')
 export class PlantaProcesoController {
-  constructor(private readonly _plantaProcesoService: PlantaProcesoService) {}
+  constructor(
+    private readonly _plantaProcesoService: PlantaProcesoService,
+    private readonly _plantaProcesoAuditoriaService: PlantaProcesoAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:plantaProcesoId')
+  async getAuditoriasPlantaProceso(
+    @Param('plantaProcesoId', ParseIntPipe) plantaProcesoId: number,
+  ): Promise<PlantaProcesoAuditoria[]> {
+    return await this._plantaProcesoAuditoriaService.get(plantaProcesoId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<PlantaProcesoAuditoria[]> {
+    return await this._plantaProcesoAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<PlantaProceso> {

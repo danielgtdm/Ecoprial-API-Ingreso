@@ -9,12 +9,29 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
+import { VehiculoAuditoriaService } from './vehiculo-auditoria/vehiculo-auditoria.service';
 import { VehiculoService } from './vehiculo.service';
 import { Vehiculo } from './vehiculo.entity';
+import { VehiculoAuditoria } from './vehiculo-auditoria/vehiculo-auditoria.entity';
 
 @Controller('vehiculo')
 export class VehiculoController {
-  constructor(private readonly _vehiculoService: VehiculoService) {}
+  constructor(
+    private readonly _vehiculoService: VehiculoService,
+    private readonly _vehiculoAuditoriaService: VehiculoAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:vehiculoId')
+  async getAuditoriasVehiculo(
+    @Param('vehiculoId', ParseIntPipe) vehiculoId: number,
+  ): Promise<VehiculoAuditoria[]> {
+    return await this._vehiculoAuditoriaService.get(vehiculoId);
+  }
+
+  @Get('auditoria')
+  async getAllAuditorias(): Promise<VehiculoAuditoria[]> {
+    return await this._vehiculoAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Vehiculo> {

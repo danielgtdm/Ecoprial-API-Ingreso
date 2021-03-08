@@ -21,7 +21,11 @@ export class Conductor extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   apellido: string;
 
-  @ManyToOne(() => Transportista, (transportista) => transportista.Conductores)
+  @ManyToOne(
+    () => Transportista,
+    (transportista) => transportista.Conductores,
+    { eager: true },
+  )
   Transportista: Transportista;
 
   @OneToMany(() => Ingreso, (ingreso) => ingreso.Conductor)

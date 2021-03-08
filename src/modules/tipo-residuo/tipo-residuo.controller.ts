@@ -11,10 +11,27 @@ import {
 
 import { TipoResiduoService } from './tipo-residuo.service';
 import { TipoResiduo } from './tipo-residuo.entity';
+import { TipoResiduoAuditoriaService } from './tipo-residuo-auditoria/tipo-residuo-auditoria.service';
+import { TipoResiduoAuditoria } from './tipo-residuo-auditoria/tipo-residuo-auditoria.entity';
 
 @Controller('tipo-residuo')
 export class TipoResiduoController {
-  constructor(private readonly _tipoResiduoService: TipoResiduoService) {}
+  constructor(
+    private readonly _tipoResiduoService: TipoResiduoService,
+    private readonly _tipoResiduoAuditoriaService: TipoResiduoAuditoriaService,
+  ) {}
+
+  @Get('auditoria/:tipoResiduoId')
+  async getAuditoriasTipoResiduo(
+    @Param('tipoResiduoId', ParseIntPipe) tipoResiduoId: number,
+  ): Promise<TipoResiduoAuditoria[]> {
+    return await this._tipoResiduoAuditoriaService.get(tipoResiduoId);
+  }
+
+  @Get('auditoria')
+  async getAuditorias(): Promise<TipoResiduoAuditoria[]> {
+    return await this._tipoResiduoAuditoriaService.getAll();
+  }
 
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<TipoResiduo> {

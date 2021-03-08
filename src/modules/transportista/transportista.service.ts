@@ -48,10 +48,24 @@ export class TransportistaService {
   }
 
   async update(id: number, transportista: Transportista): Promise<void> {
-    await this._transportistaRepository.update(id, transportista);
+    let transportistaDB: Transportista = await this._transportistaRepository.findOne(
+      id,
+    );
+
+    transportistaDB.nombre = transportista.nombre;
+    transportistaDB.rut = transportista.rut;
+    transportistaDB.descripcion = transportista.descripcion;
+
+    await transportistaDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._transportistaRepository.update(id, { status: status.INACTIVE });
+    let transportistaDB: Transportista = await this._transportistaRepository.findOne(
+      id,
+    );
+
+    transportistaDB.status = status.INACTIVE;
+
+    await transportistaDB.save();
   }
 }
