@@ -21,7 +21,7 @@ export class Ingreso extends BaseEntity {
   @Column({ type: 'datetime', nullable: false })
   entrada: Date;
 
-  @Column({ type: 'datetime', nullable: false })
+  @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
   @Column({ type: 'integer', nullable: false })
