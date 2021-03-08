@@ -1,6 +1,11 @@
+import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  FindManyOptions,
+  getConnection,
+  getConnectionManager,
+  InsertEvent,
   UpdateEvent,
 } from 'typeorm';
 
@@ -13,18 +18,42 @@ export class VehiculoSubscriber implements EntitySubscriberInterface<Vehiculo> {
     return Vehiculo;
   }
 
-  async beforeUpdate(event: UpdateEvent<Vehiculo>) {
-    const vehiculo_antes = await event.manager.findOne(
-      Vehiculo,
-      event.entity.id,
+  async afterInsert(event: InsertEvent<Vehiculo>) {
+    this.saveStatus(event);
+  }
+
+  async afterUpdate(event: UpdateEvent<Vehiculo>) {
+    this.saveStatus(event);
+  }
+
+  private async saveStatus(
+    event: InsertEvent<Vehiculo> | UpdateEvent<Vehiculo>,
+  ) {
+    const auditoriaVehiculoRepository = getConnection().getRepository(
+      VehiculoAuditoria,
+    );
+
+    const vehiculo: Vehiculo = event.entity;
+
+    const options: FindManyOptions = {
+      where: { id_Transportista: vehiculo.Transportista.id },
+      order: {
+        id: 'DESC',
+      },
+      take: 1,
+    };
+
+    const transportista_auditoria: TransportistaAuditoria = await event.manager.findOne(
+      TransportistaAuditoria,
+      options,
     );
 
     let vehiculo_auditoria = new VehiculoAuditoria();
-    vehiculo_auditoria.id_Vehiculo = vehiculo_antes.id;
-    vehiculo_auditoria.id_Transportista = vehiculo_antes.Transportista.id;
-    vehiculo_auditoria.patente = vehiculo_antes.patente;
-    vehiculo_auditoria.status_Vehiculo = vehiculo_antes.status;
+    vehiculo_auditoria.id_Vehiculo = vehiculo.id;
+    vehiculo_auditoria.patente = vehiculo.patente;
+    vehiculo_auditoria.id_Auditoria_Transportista = transportista_auditoria.id; //reemplazar por la auditoria
+    vehiculo_auditoria.status_Vehiculo = vehiculo.status;
 
-    await event.manager.save(VehiculoAuditoria, vehiculo_auditoria);
+    await auditoriaVehiculoRepository.save(vehiculo_auditoria);
   }
 }

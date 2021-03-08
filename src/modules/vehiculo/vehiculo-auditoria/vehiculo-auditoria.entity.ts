@@ -1,3 +1,4 @@
+import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
 import {
   BaseEntity,
   Column,
@@ -23,11 +24,15 @@ export class VehiculoAuditoria extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   patente: string;
 
-  @ManyToOne(() => Transportista, (transportista) => transportista.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Transportista: number;
+  @ManyToOne(
+    () => TransportistaAuditoria,
+    (transportistaAuditoria) => transportistaAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Transportista: number;
 
   @Column({ type: 'varchar', length: 8 })
   status_Vehiculo: string;

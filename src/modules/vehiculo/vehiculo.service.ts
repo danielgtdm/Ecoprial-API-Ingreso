@@ -56,10 +56,19 @@ export class VehiculoService {
   }
 
   async update(id: number, vehiculo: Vehiculo): Promise<void> {
-    await this._vehiculoRepository.update(id, vehiculo);
+    let vehiculoDB: Vehiculo = await this._vehiculoRepository.findOne(id);
+
+    vehiculoDB.patente = vehiculo.patente;
+    vehiculoDB.Transportista = vehiculo.Transportista;
+
+    await vehiculoDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._vehiculoRepository.update(id, { status: status.INACTIVE });
+    let vehiculoDB: Vehiculo = await this._vehiculoRepository.findOne(id);
+
+    vehiculoDB.status = status.INACTIVE;
+
+    vehiculoDB.save();
   }
 }
