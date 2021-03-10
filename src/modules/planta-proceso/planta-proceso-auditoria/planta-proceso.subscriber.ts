@@ -1,6 +1,10 @@
+import { GeneradorAuditoria } from '../../generador/generador-auditoria/generador-auditoria.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  FindManyOptions,
+  getConnection,
+  InsertEvent,
   UpdateEvent,
 } from 'typeorm';
 import { PlantaProceso } from '../planta-proceso.entity';
@@ -13,18 +17,42 @@ export class PlantaProcesoSubscriber
     return PlantaProceso;
   }
 
-  async beforeUpdate(event: UpdateEvent<PlantaProceso>) {
-    const plantaProceso_antes = await event.manager.findOne(
-      PlantaProceso,
-      event.entity.id,
+  afterInsert(event: InsertEvent<PlantaProceso>) {
+    this.saveStatus(event);
+  }
+
+  afterUpdate(event: UpdateEvent<PlantaProceso>) {
+    this.saveStatus(event);
+  }
+
+  private async saveStatus(
+    event: InsertEvent<PlantaProceso> | UpdateEvent<PlantaProceso>,
+  ) {
+    const auditoriaPlantaProceso = getConnection().getRepository(
+      PlantaProcesoAuditoria,
+    );
+
+    const plantaProceso: PlantaProceso = event.entity;
+
+    const options: FindManyOptions = {
+      where: { id_Generador: plantaProceso.Generador.id },
+      order: {
+        id: 'DESC',
+      },
+      take: 1,
+    };
+
+    const generador_auditoria: GeneradorAuditoria = await event.manager.findOne(
+      GeneradorAuditoria,
+      options,
     );
 
     let plantaProceso_auditoria = new PlantaProcesoAuditoria();
-    plantaProceso_auditoria.id_Planta_Proceso = plantaProceso_antes.id;
-    plantaProceso_auditoria.id_Generador = plantaProceso_antes.Generador.id;
-    plantaProceso_auditoria.nombre = plantaProceso_antes.nombre;
-    plantaProceso_auditoria.status_Planta_Proceso = plantaProceso_antes.status;
+    plantaProceso_auditoria.id_Planta_Proceso = plantaProceso.id;
+    plantaProceso_auditoria.id_Auditoria_Generador = generador_auditoria.id;
+    plantaProceso_auditoria.nombre = plantaProceso.nombre;
+    plantaProceso_auditoria.status_Planta_Proceso = plantaProceso.status;
 
-    await event.manager.save(PlantaProcesoAuditoria, plantaProceso_auditoria);
+    await auditoriaPlantaProceso.save(plantaProceso_auditoria);
   }
 }

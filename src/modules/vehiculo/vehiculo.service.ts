@@ -69,6 +69,6 @@ export class VehiculoService {
 
     vehiculoDB.status = status.INACTIVE;
 
-    vehiculoDB.save();
+    await vehiculoDB.save();
   }
 }

@@ -89,10 +89,24 @@ export class IngresoService {
   }
 
   async update(id: number, ingreso: Ingreso): Promise<void> {
-    await this._ingresoRepository.update(id, ingreso);
+    let ingresoDB = await this._ingresoRepository.findOne(id);
+
+    ingresoDB.nro_guia = ingreso.nro_guia;
+    ingresoDB.entrada = ingreso.entrada;
+    ingresoDB.salida = ingreso.salida;
+    ingresoDB.Conductor = ingreso.Conductor;
+    ingresoDB.PlantaProceso = ingreso.PlantaProceso;
+    ingresoDB.Residuo = ingreso.Residuo;
+    ingresoDB.Vehiculo = ingreso.Vehiculo;
+
+    await ingresoDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._ingresoRepository.update(id, { status: status.INACTIVE });
+    let ingresoDB = await this._ingresoRepository.findOne(id);
+
+    ingresoDB.status = status.INACTIVE;
+
+    await ingresoDB.save();
   }
 }

@@ -1,6 +1,12 @@
+import { ConductorAuditoria } from '../../conductor/conductor-auditoria/conductor-auditoria.entity';
+import { PlantaProcesoAuditoria } from '../../planta-proceso/planta-proceso-auditoria/planta-proceso-auditoria.entity';
+import { ResiduoAuditoria } from '../../residuo/residuo-auditoria/residuo-auditoria.entity';
+import { VehiculoAuditoria } from '../../vehiculo/vehiculo-auditoria/vehiculo-auditoria.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  FindOneOptions,
+  getConnection,
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
@@ -13,23 +19,89 @@ export class IngresoSubscriber implements EntitySubscriberInterface<Ingreso> {
     return Ingreso;
   }
 
-  async beforeUpdate(event: UpdateEvent<Ingreso>) {
-    const ingreso_antes = await event.manager.findOne(Ingreso, event.entity.id);
-
-    let ingreso_auditoria = new IngresoAuditoria();
-    ingreso_auditoria.id_Ingreso = ingreso_antes.id;
-    ingreso_auditoria.id_Conductor = ingreso_antes.Conductor.id;
-    ingreso_auditoria.id_Planta_Proceso = ingreso_antes.PlantaProceso.id;
-    ingreso_auditoria.id_Residuo = ingreso_antes.Residuo.id;
-    ingreso_auditoria.id_Vehiculo = ingreso_antes.Vehiculo.id;
-    ingreso_auditoria.nro_guia = ingreso_antes.nro_guia;
-    ingreso_auditoria.nro_report = ingreso_antes.nro_report;
-    ingreso_auditoria.entrada = ingreso_antes.entrada;
-    ingreso_auditoria.salida = ingreso_antes.salida;
-    ingreso_auditoria.status_Ingreso = ingreso_antes.status;
-
-    await event.manager.save(IngresoAuditoria, ingreso_auditoria);
+  afterInsert(event: InsertEvent<Ingreso>) {
+    this.saveStatus(event);
   }
 
-  async afterInsert(event: InsertEvent<Ingreso>) {}
+  afterUpdate(event: UpdateEvent<Ingreso>) {
+    this.saveStatus(event);
+  }
+
+  private async saveStatus(event: InsertEvent<Ingreso> | UpdateEvent<Ingreso>) {
+    const auditoriaIngresoRepository = getConnection().getRepository(
+      IngresoAuditoria,
+    );
+    const auditoriaConductorRepository = getConnection().getRepository(
+      ConductorAuditoria,
+    );
+    const auditoriaPlantaProcesoRepository = getConnection().getRepository(
+      PlantaProcesoAuditoria,
+    );
+    const auditoriaResiduoRepository = getConnection().getRepository(
+      ResiduoAuditoria,
+    );
+    const auditoriaVehiculoRepository = getConnection().getRepository(
+      VehiculoAuditoria,
+    );
+
+    const ingreso: Ingreso = event.entity;
+
+    const optionsConductor: FindOneOptions = {
+      where: { id_Conductor: ingreso.Conductor.id },
+      order: {
+        id: 'DESC',
+      },
+    };
+
+    const conductor_auditoria: ConductorAuditoria = await auditoriaConductorRepository.findOne(
+      optionsConductor,
+    );
+
+    const optionsPlantaProceso: FindOneOptions = {
+      where: { id_Planta_Proceso: ingreso.PlantaProceso.id },
+      order: {
+        id: 'DESC',
+      },
+    };
+
+    const plantaProceso_auditoria: PlantaProcesoAuditoria = await auditoriaPlantaProcesoRepository.findOne(
+      optionsPlantaProceso,
+    );
+
+    const optionsResiduo: FindOneOptions = {
+      where: { id_Residuo: ingreso.Residuo.id },
+      order: {
+        id: 'DESC',
+      },
+    };
+
+    const residuo_auditoria: ResiduoAuditoria = await auditoriaResiduoRepository.findOne(
+      optionsResiduo,
+    );
+
+    const optionsVehiculo: FindOneOptions = {
+      where: { id_Vehiculo: ingreso.Vehiculo.id },
+      order: {
+        id: 'DESC',
+      },
+    };
+
+    const vehiculo_auditoria: VehiculoAuditoria = await auditoriaVehiculoRepository.findOne(
+      optionsVehiculo,
+    );
+
+    let ingreso_auditoria = new IngresoAuditoria();
+    ingreso_auditoria.id_Ingreso = ingreso.id;
+    ingreso_auditoria.id_Auditoria_Conductor = conductor_auditoria.id;
+    ingreso_auditoria.id_Auditoria_Planta_Proceso = plantaProceso_auditoria.id;
+    ingreso_auditoria.id_Auditoria_Residuo = residuo_auditoria.id;
+    ingreso_auditoria.id_Auditoria_Vehiculo = vehiculo_auditoria.id;
+    ingreso_auditoria.nro_guia = ingreso.nro_guia;
+    ingreso_auditoria.nro_report = ingreso.nro_report;
+    ingreso_auditoria.entrada = ingreso.entrada;
+    ingreso_auditoria.salida = ingreso.salida;
+    ingreso_auditoria.status_Ingreso = ingreso.status;
+
+    await auditoriaIngresoRepository.save(ingreso_auditoria);
+  }
 }

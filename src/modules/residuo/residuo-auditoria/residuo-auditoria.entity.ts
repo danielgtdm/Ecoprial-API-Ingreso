@@ -1,4 +1,3 @@
-import { TipoResiduo } from '../../tipo-residuo/tipo-residuo.entity';
 import {
   BaseEntity,
   Column,
@@ -9,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Residuo } from '../residuo.entity';
+import { TipoResiduoAuditoria } from '../../tipo-residuo/tipo-residuo-auditoria/tipo-residuo-auditoria.entity';
 
 @Entity('residuo_auditoria')
 export class ResiduoAuditoria extends BaseEntity {
@@ -45,11 +45,15 @@ export class ResiduoAuditoria extends BaseEntity {
   @Column({ type: 'double', nullable: false })
   tds: number;
 
-  @ManyToOne(() => TipoResiduo, (tipoResiduo) => tipoResiduo.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Tipo_Residuo: number;
+  @ManyToOne(
+    () => TipoResiduoAuditoria,
+    (tipoResiduoAuditoria) => tipoResiduoAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Tipo_Residuo: number;
 
   @Column({ type: 'varchar', length: 8 })
   status_Residuo: string;

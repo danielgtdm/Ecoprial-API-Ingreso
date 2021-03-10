@@ -50,10 +50,23 @@ export class TipoResiduoService {
   }
 
   async update(id: number, tipoResiduo: TipoResiduo): Promise<void> {
-    await this._tipoResiduoRepository.update(id, tipoResiduo);
+    let tipoResiduoDB: TipoResiduo = await this._tipoResiduoRepository.findOne(
+      id,
+    );
+
+    tipoResiduoDB.nombre = tipoResiduo.nombre;
+    tipoResiduoDB.descripcion = tipoResiduo.descripcion;
+
+    await tipoResiduoDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._tipoResiduoRepository.update(id, { status: status.INACTIVE });
+    let tipoResiduoDB: TipoResiduo = await this._tipoResiduoRepository.findOne(
+      id,
+    );
+
+    tipoResiduoDB.status = status.INACTIVE;
+
+    await tipoResiduoDB.save();
   }
 }
