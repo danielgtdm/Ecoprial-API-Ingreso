@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { ConductorController } from './conductor.controller';
 import { ConductorService } from './conductor.service';
-import { TransportistaService } from '../transportista/transportista.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConductorRepository } from './conductor.repository';
-import { TransportistaRepository } from '../transportista/transportista.repository';
 import { ConductorAuditoriaModule } from './conductor-auditoria/conductor-auditoria.module';
+import { TransportistaModule } from '../transportista/transportista.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ConductorRepository, TransportistaRepository]),
+    TypeOrmModule.forFeature([ConductorRepository]),
+    TransportistaModule,
     ConductorAuditoriaModule,
   ],
   controllers: [ConductorController],
-  providers: [ConductorService, TransportistaService],
+  providers: [ConductorService],
   exports: [ConductorService],
 })
 export class ConductorModule {}
