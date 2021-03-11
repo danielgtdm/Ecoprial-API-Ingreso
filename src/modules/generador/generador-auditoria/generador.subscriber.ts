@@ -1,6 +1,8 @@
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  getConnection,
+  InsertEvent,
   UpdateEvent,
 } from 'typeorm';
 import { Generador } from '../generador.entity';
@@ -13,18 +15,28 @@ export class GeneradorSubscriber
     return Generador;
   }
 
-  async beforeUpdate(event: UpdateEvent<Generador>) {
-    const generador_antes = await event.manager.findOne(
-      Generador,
-      event.entity.id,
+  afterInsert(event: InsertEvent<Generador>) {
+    this.saveStatus(event);
+  }
+
+  afterUpdate(event: UpdateEvent<Generador>) {
+    this.saveStatus(event);
+  }
+
+  private async saveStatus(
+    event: InsertEvent<Generador> | UpdateEvent<Generador>,
+  ) {
+    const auditoriaGeneradorRepository = getConnection().getRepository(
+      GeneradorAuditoria,
     );
+    const generador: Generador = event.entity;
 
     let generador_auditoria = new GeneradorAuditoria();
-    generador_auditoria.id_Generador = generador_antes.id;
-    generador_auditoria.nombre = generador_antes.nombre;
-    generador_auditoria.rut = generador_antes.rut;
-    generador_auditoria.status_Generador = generador_antes.status;
+    generador_auditoria.id_Generador = generador.id;
+    generador_auditoria.nombre = generador.nombre;
+    generador_auditoria.rut = generador.rut;
+    generador_auditoria.status_Generador = generador.status;
 
-    await event.manager.save(GeneradorAuditoria, generador_auditoria);
+    await auditoriaGeneradorRepository.save(generador_auditoria);
   }
 }

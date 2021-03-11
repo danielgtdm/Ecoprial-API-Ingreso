@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { Transportista } from '../../transportista/transportista.entity';
 import { Vehiculo } from '../vehiculo.entity';
 @Entity('vehiculo_auditoria')
 export class VehiculoAuditoria extends BaseEntity {

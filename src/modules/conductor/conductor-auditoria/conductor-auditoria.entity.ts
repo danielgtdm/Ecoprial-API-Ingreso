@@ -1,4 +1,3 @@
-import { Transportista } from '../../transportista/transportista.entity';
 import {
   BaseEntity,
   Column,
@@ -9,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Conductor } from '../conductor.entity';
+import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
 
 @Entity('conductor_auditoria')
 export class ConductorAuditoria extends BaseEntity {
@@ -27,11 +27,15 @@ export class ConductorAuditoria extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   apellido: string;
 
-  @ManyToOne(() => Transportista, (transportista) => transportista.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Transportista: number;
+  @ManyToOne(
+    () => TransportistaAuditoria,
+    (transportistaAuditoria) => transportistaAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Transportista: number;
 
   @Column({ type: 'varchar', length: 8 })
   status_Conductor: string;

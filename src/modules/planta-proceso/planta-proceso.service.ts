@@ -37,7 +37,9 @@ export class PlantaProcesoService {
   }
 
   async getAll(): Promise<PlantaProceso[]> {
-    const plantasProceso: PlantaProceso[] = await this._plantaProcesoRepository.find();
+    const plantasProceso: PlantaProceso[] = await this._plantaProcesoRepository.find(
+      { where: { status: status.ACTIVE } },
+    );
     return plantasProceso;
   }
 
@@ -54,10 +56,19 @@ export class PlantaProcesoService {
   }
 
   async update(id: number, plantaProceso: PlantaProceso): Promise<void> {
-    await this._plantaProcesoRepository.update(id, plantaProceso);
+    let plantaProcesoDB = await this._plantaProcesoRepository.findOne(id);
+
+    plantaProcesoDB.nombre = plantaProceso.nombre;
+    plantaProcesoDB.Generador = plantaProceso.Generador;
+
+    await plantaProcesoDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._plantaProcesoRepository.update(id, { status: status.INACTIVE });
+    let plantaProcesoDB = await this._plantaProcesoRepository.findOne(id);
+
+    plantaProcesoDB.status = status.INACTIVE;
+
+    await plantaProcesoDB.save();
   }
 }

@@ -59,10 +59,20 @@ export class ConductorService {
   }
 
   async update(id: number, conductor: Conductor): Promise<void> {
-    await this._conductorRepository.update(id, conductor);
+    let conductorDB: Conductor = await this._conductorRepository.findOne(id);
+
+    conductorDB.nombre = conductor.nombre;
+    conductorDB.apellido = conductor.apellido;
+    conductorDB.Transportista = conductor.Transportista;
+
+    await conductorDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._conductorRepository.update(id, { status: status.INACTIVE });
+    let conductorDB: Conductor = await this._conductorRepository.findOne(id);
+
+    conductorDB.status = status.INACTIVE;
+
+    await conductorDB.save();
   }
 }

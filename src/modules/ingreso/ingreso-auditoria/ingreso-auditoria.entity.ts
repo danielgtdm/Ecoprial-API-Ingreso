@@ -1,5 +1,3 @@
-import { PlantaProceso } from '../../planta-proceso/planta-proceso.entity';
-import { Vehiculo } from '../../vehiculo/vehiculo.entity';
 import {
   BaseEntity,
   Column,
@@ -10,8 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Ingreso } from '../ingreso.entity';
-import { Conductor } from '../../conductor/conductor.entity';
-import { Residuo } from '../../residuo/residuo.entity';
+import { PlantaProcesoAuditoria } from '../../planta-proceso/planta-proceso-auditoria/planta-proceso-auditoria.entity';
+import { ResiduoAuditoria } from '../../residuo/residuo-auditoria/residuo-auditoria.entity';
+import { VehiculoAuditoria } from '../../vehiculo/vehiculo-auditoria/vehiculo-auditoria.entity';
+import { ConductorAuditoria } from '../../conductor/conductor-auditoria/conductor-auditoria.entity';
 
 @Entity('ingreso_auditoria')
 export class IngresoAuditoria extends BaseEntity {
@@ -27,7 +27,7 @@ export class IngresoAuditoria extends BaseEntity {
   @Column({ type: 'datetime', nullable: false })
   entrada: Date;
 
-  @Column({ type: 'datetime', nullable: false })
+  @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
   @Column({ type: 'integer', nullable: false })
@@ -36,29 +36,45 @@ export class IngresoAuditoria extends BaseEntity {
   @Column({ type: 'integer', nullable: false })
   nro_report: number;
 
-  @ManyToOne(() => PlantaProceso, (plantaProceso) => plantaProceso.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Planta_Proceso: number;
+  @ManyToOne(
+    () => PlantaProcesoAuditoria,
+    (plantaProcesoAuditoria) => plantaProcesoAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Planta_Proceso: number;
 
-  @ManyToOne(() => Residuo, (residuo) => residuo.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Residuo: number;
+  @ManyToOne(
+    () => ResiduoAuditoria,
+    (residuoAuditoria) => residuoAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Residuo: number;
 
-  @ManyToOne(() => Vehiculo, (vehiculo) => vehiculo.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Vehiculo: number;
+  @ManyToOne(
+    () => VehiculoAuditoria,
+    (vehiculoAuditoria) => vehiculoAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Vehiculo: number;
 
-  @ManyToOne(() => Conductor, (conductor) => conductor.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Conductor: number;
+  @ManyToOne(
+    () => ConductorAuditoria,
+    (conductorAuditoria) => conductorAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Conductor: number;
 
   @Column({ type: 'varchar', length: 8 })
   status_Ingreso: string;

@@ -47,10 +47,19 @@ export class GeneradorService {
   }
 
   async update(id: number, generador: Generador): Promise<void> {
-    await this._generadorRepository.update(id, generador);
+    let generadorDB: Generador = await this._generadorRepository.findOne(id);
+
+    generadorDB.nombre = generador.nombre;
+    generadorDB.rut = generador.rut;
+
+    await generadorDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._generadorRepository.update(id, { status: status.INACTIVE });
+    let generadorDB: Generador = await this._generadorRepository.findOne(id);
+
+    generadorDB.status = status.INACTIVE;
+
+    await generadorDB.save();
   }
 }

@@ -1,6 +1,8 @@
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  getConnection,
+  InsertEvent,
   UpdateEvent,
 } from 'typeorm';
 import { TipoResiduo } from '../tipo-residuo.entity';
@@ -13,18 +15,28 @@ export class TipoResiduoSubscriber
     return TipoResiduo;
   }
 
-  async beforeUpdate(event: UpdateEvent<TipoResiduo>) {
-    const tipoResiduo_antes = await event.manager.findOne(
-      TipoResiduo,
-      event.entity.id,
+  afterInsert(event: InsertEvent<TipoResiduo>) {
+    this.saveStatus(event);
+  }
+
+  afterUpdate(event: UpdateEvent<TipoResiduo>) {
+    this.saveStatus(event);
+  }
+
+  private async saveStatus(
+    event: InsertEvent<TipoResiduo> | UpdateEvent<TipoResiduo>,
+  ) {
+    const auditoriaTipoResiduoRepository = getConnection().getRepository(
+      TipoResiduoAuditoria,
     );
+    const tipoResiduo: TipoResiduo = event.entity;
 
     let tipoResiduo_aditoria = new TipoResiduoAuditoria();
-    tipoResiduo_aditoria.id_Tipo_Residuo = tipoResiduo_antes.id;
-    tipoResiduo_aditoria.nombre = tipoResiduo_antes.nombre;
-    tipoResiduo_aditoria.descripcion = tipoResiduo_antes.descripcion;
-    tipoResiduo_aditoria.status_Residuo = tipoResiduo_antes.status;
+    tipoResiduo_aditoria.id_Tipo_Residuo = tipoResiduo.id;
+    tipoResiduo_aditoria.nombre = tipoResiduo.nombre;
+    tipoResiduo_aditoria.descripcion = tipoResiduo.descripcion;
+    tipoResiduo_aditoria.status_Residuo = tipoResiduo.status;
 
-    await event.manager.save(TipoResiduoAuditoria, tipoResiduo_aditoria);
+    await auditoriaTipoResiduoRepository.save(tipoResiduo_aditoria);
   }
 }

@@ -56,10 +56,26 @@ export class ResiduoService {
   }
 
   async update(id: number, residuo: Residuo): Promise<void> {
-    await this._residuoRepository.update(id, residuo);
+    let residuoDB = await this._residuoRepository.findOne(id);
+
+    residuoDB.TipoResiduo = residuo.TipoResiduo;
+    residuoDB.cantidad = residuo.cantidad;
+    residuoDB.celda = residuo.celda;
+    residuoDB.conductividad_electrica = residuo.conductividad_electrica;
+    residuoDB.humedad = residuo.humedad;
+    residuoDB.pH = residuo.pH;
+    residuoDB.salinidad = residuo.salinidad;
+    residuoDB.temperatura = residuo.temperatura;
+    residuoDB.tds = residuo.tds;
+
+    await residuoDB.save();
   }
 
   async delete(id: number): Promise<void> {
-    await this._residuoRepository.update(id, { status: status.INACTIVE });
+    let residuoDB: Residuo = await this._residuoRepository.findOne(id);
+
+    residuoDB.status = status.INACTIVE;
+
+    await residuoDB.save();
   }
 }

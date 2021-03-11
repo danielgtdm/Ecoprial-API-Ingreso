@@ -1,4 +1,3 @@
-import { Generador } from '../../generador/generador.entity';
 import {
   BaseEntity,
   Column,
@@ -9,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PlantaProceso } from '../planta-proceso.entity';
+import { GeneradorAuditoria } from '../../generador/generador-auditoria/generador-auditoria.entity';
 
 @Entity('planta_proceso_auditoria')
 export class PlantaProcesoAuditoria extends BaseEntity {
@@ -24,11 +24,15 @@ export class PlantaProcesoAuditoria extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   nombre: string;
 
-  @ManyToOne(() => Generador, (generador) => generador.id, {
-    nullable: false,
-    eager: true,
-  })
-  id_Generador: number;
+  @ManyToOne(
+    () => GeneradorAuditoria,
+    (generadorAuditoria) => generadorAuditoria.id,
+    {
+      nullable: false,
+      eager: true,
+    },
+  )
+  id_Auditoria_Generador: number;
 
   @Column({ type: 'varchar', length: 8 })
   status_Planta_Proceso: string;

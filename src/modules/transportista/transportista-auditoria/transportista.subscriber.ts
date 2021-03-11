@@ -1,10 +1,10 @@
 import {
   EntitySubscriberInterface,
   EventSubscriber,
+  getConnection,
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { TransactionCommitEvent } from 'typeorm/subscriber/event/TransactionCommitEvent';
 import { Transportista } from '../transportista.entity';
 import { TransportistaAuditoria } from './transportista-auditoria.entity';
 
@@ -15,17 +15,20 @@ export class TransportistaSubscriber
     return Transportista;
   }
 
-  async afterInsert(event: InsertEvent<Transportista>) {
+  afterInsert(event: InsertEvent<Transportista>) {
     this.saveStatus(event);
   }
 
-  async afterUpdate(event: UpdateEvent<Transportista>) {
+  afterUpdate(event: UpdateEvent<Transportista>) {
     this.saveStatus(event);
   }
 
   private async saveStatus(
     event: InsertEvent<Transportista> | UpdateEvent<Transportista>,
   ) {
+    const auditoriaTransportistaRepository = getConnection().getRepository(
+      TransportistaAuditoria,
+    );
     const transportista: Transportista = event.entity;
 
     let transportista_auditoria = new TransportistaAuditoria();
@@ -35,6 +38,6 @@ export class TransportistaSubscriber
     transportista_auditoria.descripcion = transportista.descripcion;
     transportista_auditoria.status_Transportista = transportista.status;
 
-    await event.manager.save(TransportistaAuditoria, transportista_auditoria);
+    await auditoriaTransportistaRepository.save(transportista_auditoria);
   }
 }

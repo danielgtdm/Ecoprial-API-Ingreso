@@ -1,16 +1,14 @@
-import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,
   FindManyOptions,
   getConnection,
-  getConnectionManager,
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-
 import { Vehiculo } from '../vehiculo.entity';
 import { VehiculoAuditoria } from './vehiculo-auditoria.entity';
+import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
 
 @EventSubscriber()
 export class VehiculoSubscriber implements EntitySubscriberInterface<Vehiculo> {
