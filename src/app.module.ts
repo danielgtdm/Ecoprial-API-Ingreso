@@ -14,9 +14,12 @@ import { VehiculoModule } from './modules/vehiculo/vehiculo.module';
 import { TransportistaModule } from './modules/transportista/transportista.module';
 import { ResiduoModule } from './modules/residuo/residuo.module';
 import { TipoResiduoModule } from './modules/tipo-residuo/tipo-residuo.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsuarioModule } from './modules/usuario/usuario.module';
+import { RolModule } from './modules/rol/rol.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, IngresoModule, GeneradorModule, PlantaProcesoModule, ConductorModule, VehiculoModule, TransportistaModule, ResiduoModule, TipoResiduoModule],
+  imports: [ConfigModule, DatabaseModule, IngresoModule, GeneradorModule, PlantaProcesoModule, ConductorModule, VehiculoModule, TransportistaModule, ResiduoModule, TipoResiduoModule, AuthModule, UsuarioModule, RolModule],
   controllers: [AppController],
   providers: [AppService],
 })
