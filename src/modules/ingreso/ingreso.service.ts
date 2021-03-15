@@ -18,6 +18,7 @@ import { Conductor } from '../conductor/conductor.entity';
 import { ResiduoService } from '../residuo/residuo.service';
 import { Residuo } from '../residuo/residuo.entity';
 import { TipoResiduo } from '../tipo-residuo/tipo-residuo.entity';
+import { TipoResiduoService } from '../tipo-residuo/tipo-residuo.service';
 
 @Injectable()
 export class IngresoService {
@@ -28,6 +29,7 @@ export class IngresoService {
     private readonly _vehiculoService: VehiculoService,
     private readonly _conductorService: ConductorService,
     private readonly _residuoService: ResiduoService,
+    private readonly _tipoResiduoService: TipoResiduoService,
   ) {}
 
   async get(id: number): Promise<Ingreso> {
@@ -96,7 +98,25 @@ export class IngresoService {
     ingresoDB.salida = ingreso.salida;
     ingresoDB.Conductor = ingreso.Conductor;
     ingresoDB.PlantaProceso = ingreso.PlantaProceso;
-    ingresoDB.Residuo = ingreso.Residuo;
+
+    const residuoDB: Residuo = await this._residuoService.get(
+      ingreso.Residuo.id,
+    );
+    const tipoResiduoDB: TipoResiduo = await this._tipoResiduoService.get(
+      ingreso.Residuo.TipoResiduo.id,
+    );
+    residuoDB.cantidad = ingreso.Residuo.cantidad;
+    residuoDB.celda = ingreso.Residuo.celda;
+    residuoDB.conductividad_electrica = ingreso.Residuo.conductividad_electrica;
+    residuoDB.humedad = ingreso.Residuo.humedad;
+    residuoDB.pH = ingreso.Residuo.pH;
+    residuoDB.salinidad = ingreso.Residuo.salinidad;
+    residuoDB.tds = ingreso.Residuo.tds;
+    residuoDB.temperatura = ingreso.Residuo.temperatura;
+    residuoDB.TipoResiduo = tipoResiduoDB;
+
+    await residuoDB.save();
+
     ingresoDB.Vehiculo = ingreso.Vehiculo;
 
     await ingresoDB.save();
