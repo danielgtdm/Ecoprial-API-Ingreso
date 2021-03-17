@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class fixConductorAuditoria1615391989723 implements MigrationInterface {
+export class fixIngreso1615992354838 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
     }

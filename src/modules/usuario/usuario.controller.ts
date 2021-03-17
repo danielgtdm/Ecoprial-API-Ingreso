@@ -7,7 +7,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../rol/decorators/rol.decorator';
+import { RolGuard } from '../rol/guards/rol.guard';
 import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
 
@@ -21,13 +25,10 @@ export class UsuarioController {
   }
 
   @Get()
+  // @Roles('ADMINISTRADOR')
+  // @UseGuards(AuthGuard(), RolGuard)
   async getAll(): Promise<Usuario[]> {
     return await this._usuarioService.getAll();
-  }
-
-  @Post()
-  async create(@Body() usuario: Usuario): Promise<Usuario> {
-    return await this._usuarioService.create(usuario);
   }
 
   @Patch(':id')
@@ -41,5 +42,13 @@ export class UsuarioController {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return await this._usuarioService.delete(id);
+  }
+
+  @Post('setRol/:usuarioId/:rolId')
+  async setRol(
+    @Param('usuarioId', ParseIntPipe) usuarioId: number,
+    @Param('rolId', ParseIntPipe) rolId: number,
+  ): Promise<void> {
+    return await this._usuarioService.setRolToUser(usuarioId, rolId);
   }
 }
