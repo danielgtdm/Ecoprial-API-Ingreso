@@ -101,6 +101,7 @@ export class IngresoSubscriber implements EntitySubscriberInterface<Ingreso> {
     ingreso_auditoria.entrada = ingreso.entrada;
     ingreso_auditoria.salida = ingreso.salida;
     ingreso_auditoria.status_Ingreso = ingreso.status;
+    ingreso_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaIngresoRepository.save(ingreso_auditoria);
   }

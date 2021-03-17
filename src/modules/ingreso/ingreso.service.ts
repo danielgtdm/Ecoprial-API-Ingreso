@@ -18,6 +18,8 @@ import { Conductor } from '../conductor/conductor.entity';
 import { ResiduoService } from '../residuo/residuo.service';
 import { Residuo } from '../residuo/residuo.entity';
 import { TipoResiduo } from '../tipo-residuo/tipo-residuo.entity';
+import { SaveOptions } from 'typeorm';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Injectable()
 export class IngresoService {
@@ -59,6 +61,7 @@ export class IngresoService {
     vehiculoId: number,
     conductorId: number,
     ingreso: Ingreso,
+    usuario: Usuario,
   ): Promise<Ingreso> {
     if (!ingreso.Residuo) {
       throw new BadRequestException();
@@ -90,12 +93,19 @@ export class IngresoService {
     // });
     // ingreso.nro_report = latestIngreso.nro_report + 1;
 
-    const savedIngreso: Ingreso = await this._ingresoRepository.save(ingreso);
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    const savedIngreso: Ingreso = await this._ingresoRepository.save(
+      ingreso,
+      saveOptions,
+    );
 
     return savedIngreso;
   }
 
-  async update(id: number, ingreso: Ingreso): Promise<void> {
+  async update(id: number, ingreso: Ingreso, usuario: Usuario): Promise<void> {
     let ingresoDB = await this._ingresoRepository.findOne(id);
 
     ingresoDB.nro_guia = ingreso.nro_guia;
@@ -106,14 +116,22 @@ export class IngresoService {
     ingresoDB.Residuo = ingreso.Residuo;
     ingresoDB.Vehiculo = ingreso.Vehiculo;
 
-    await ingresoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await ingresoDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let ingresoDB = await this._ingresoRepository.findOne(id);
 
     ingresoDB.status = status.INACTIVE;
 
-    await ingresoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await ingresoDB.save(saveOptions);
   }
 }

@@ -1,3 +1,4 @@
+import { Usuario } from '../../usuario/usuario.entity';
 import {
   BaseEntity,
   Column,
@@ -31,6 +32,12 @@ export class TransportistaAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status_Transportista: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

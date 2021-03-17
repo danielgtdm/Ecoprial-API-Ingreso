@@ -13,6 +13,8 @@ import { VehiculoAuditoriaService } from './vehiculo-auditoria/vehiculo-auditori
 import { VehiculoService } from './vehiculo.service';
 import { Vehiculo } from './vehiculo.entity';
 import { VehiculoAuditoria } from './vehiculo-auditoria/vehiculo-auditoria.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Controller('vehiculo')
 export class VehiculoController {
@@ -47,20 +49,29 @@ export class VehiculoController {
   async create(
     @Param('transportistaId', ParseIntPipe) transportistaId: number,
     @Body() vehiculo: Vehiculo,
+    @GetUser() usuario: Usuario,
   ): Promise<Vehiculo> {
-    return await this._vehiculoService.create(transportistaId, vehiculo);
+    return await this._vehiculoService.create(
+      transportistaId,
+      vehiculo,
+      usuario,
+    );
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() vehiculo: Vehiculo,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._vehiculoService.update(id, vehiculo);
+    return await this._vehiculoService.update(id, vehiculo, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._vehiculoService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._vehiculoService.delete(id, usuario);
   }
 }

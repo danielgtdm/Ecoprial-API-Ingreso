@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { PlantaProceso } from '../planta-proceso.entity';
 import { GeneradorAuditoria } from '../../generador/generador-auditoria/generador-auditoria.entity';
+import { Usuario } from '../../usuario/usuario.entity';
 
 @Entity('planta_proceso_auditoria')
 export class PlantaProcesoAuditoria extends BaseEntity {
@@ -36,6 +37,12 @@ export class PlantaProcesoAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', length: 8 })
   status_Planta_Proceso: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

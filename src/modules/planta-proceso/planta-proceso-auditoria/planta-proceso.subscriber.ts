@@ -52,6 +52,7 @@ export class PlantaProcesoSubscriber
     plantaProceso_auditoria.id_Auditoria_Generador = generador_auditoria.id;
     plantaProceso_auditoria.nombre = plantaProceso.nombre;
     plantaProceso_auditoria.status_Planta_Proceso = plantaProceso.status;
+    plantaProceso_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaPlantaProceso.save(plantaProceso_auditoria);
   }

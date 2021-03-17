@@ -37,6 +37,7 @@ export class TransportistaSubscriber
     transportista_auditoria.rut = transportista.rut;
     transportista_auditoria.descripcion = transportista.descripcion;
     transportista_auditoria.status_Transportista = transportista.status;
+    transportista_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaTransportistaRepository.save(transportista_auditoria);
   }

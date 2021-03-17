@@ -13,6 +13,8 @@ import { TipoResiduoService } from './tipo-residuo.service';
 import { TipoResiduo } from './tipo-residuo.entity';
 import { TipoResiduoAuditoriaService } from './tipo-residuo-auditoria/tipo-residuo-auditoria.service';
 import { TipoResiduoAuditoria } from './tipo-residuo-auditoria/tipo-residuo-auditoria.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Controller('tipo-residuo')
 export class TipoResiduoController {
@@ -44,20 +46,27 @@ export class TipoResiduoController {
   }
 
   @Post()
-  async create(@Body() tipoResiduo: TipoResiduo): Promise<TipoResiduo> {
-    return await this._tipoResiduoService.create(tipoResiduo);
+  async create(
+    @Body() tipoResiduo: TipoResiduo,
+    @GetUser() usuario: Usuario,
+  ): Promise<TipoResiduo> {
+    return await this._tipoResiduoService.create(tipoResiduo, usuario);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() tipoResiduo: TipoResiduo,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._tipoResiduoService.update(id, tipoResiduo);
+    return await this._tipoResiduoService.update(id, tipoResiduo, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._tipoResiduoService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._tipoResiduoService.delete(id, usuario);
   }
 }

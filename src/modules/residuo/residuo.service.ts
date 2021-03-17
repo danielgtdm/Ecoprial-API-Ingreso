@@ -10,6 +10,8 @@ import { Residuo } from './residuo.entity';
 
 import { TipoResiduoService } from '../tipo-residuo/tipo-residuo.service';
 import { TipoResiduo } from '../tipo-residuo/tipo-residuo.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class ResiduoService {
@@ -43,19 +45,30 @@ export class ResiduoService {
     return residuos;
   }
 
-  async create(tipoResiduoId: number, residuo: Residuo): Promise<Residuo> {
+  async create(
+    tipoResiduoId: number,
+    residuo: Residuo,
+    usuario: Usuario,
+  ): Promise<Residuo> {
     const tipoResiduo: TipoResiduo = await this._tipoResiduoService.get(
       tipoResiduoId,
     );
 
     residuo.TipoResiduo = tipoResiduo;
 
-    const savedResiduo: Residuo = await this._residuoRepository.save(residuo);
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    const savedResiduo: Residuo = await this._residuoRepository.save(
+      residuo,
+      saveOptions,
+    );
 
     return savedResiduo;
   }
 
-  async update(id: number, residuo: Residuo): Promise<void> {
+  async update(id: number, residuo: Residuo, usuario: Usuario): Promise<void> {
     let residuoDB = await this._residuoRepository.findOne(id);
 
     residuoDB.TipoResiduo = residuo.TipoResiduo;
@@ -68,14 +81,22 @@ export class ResiduoService {
     residuoDB.temperatura = residuo.temperatura;
     residuoDB.tds = residuo.tds;
 
-    await residuoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await residuoDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let residuoDB: Residuo = await this._residuoRepository.findOne(id);
 
     residuoDB.status = status.INACTIVE;
 
-    await residuoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await residuoDB.save(saveOptions);
   }
 }

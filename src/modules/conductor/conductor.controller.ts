@@ -50,8 +50,8 @@ export class ConductorController {
   }
 
   @Post(':transportistaId')
-  @Roles('ADMINISTRADOR')
-  @UseGuards(AuthGuard(), RolGuard)
+  // @Roles('ADMINISTRADOR')
+  // @UseGuards(AuthGuard(), RolGuard)
   async create(
     @Param('transportistaId', ParseIntPipe) transportistaId: number,
     @Body() conductor: Conductor,
@@ -65,8 +65,8 @@ export class ConductorController {
   }
 
   @Patch(':id')
-  @Roles('ADMINISTRADOR')
-  @UseGuards(AuthGuard(), RolGuard)
+  // @Roles('ADMINISTRADOR')
+  // @UseGuards(AuthGuard(), RolGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() conductor: Conductor,
@@ -76,7 +76,10 @@ export class ConductorController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._conductorService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._conductorService.delete(id, usuario);
   }
 }

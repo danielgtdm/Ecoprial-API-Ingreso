@@ -9,6 +9,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Vehiculo } from '../vehiculo.entity';
+import { Usuario } from '../../usuario/usuario.entity';
 @Entity('vehiculo_auditoria')
 export class VehiculoAuditoria extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
@@ -35,6 +36,12 @@ export class VehiculoAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', length: 8 })
   status_Vehiculo: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
