@@ -24,6 +24,7 @@ import { IngresoAuditoriaModule } from './ingreso-auditoria/ingreso-auditoria.mo
     ConductorModule,
     ResiduoModule,
     IngresoAuditoriaModule,
+    TipoResiduoModule,
   ],
   controllers: [IngresoController],
   providers: [IngresoService],
