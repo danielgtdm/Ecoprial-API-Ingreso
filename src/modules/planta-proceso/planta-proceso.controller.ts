@@ -13,6 +13,8 @@ import { PlantaProcesoService } from './planta-proceso.service';
 import { PlantaProceso } from './planta-proceso.entity';
 import { PlantaProcesoAuditoriaService } from './planta-proceso-auditoria/planta-proceso-auditoria.service';
 import { PlantaProcesoAuditoria } from './planta-proceso-auditoria/planta-proceso-auditoria.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Controller('planta-proceso')
 export class PlantaProcesoController {
@@ -47,20 +49,29 @@ export class PlantaProcesoController {
   async create(
     @Param('generadorId', ParseIntPipe) generadorId: number,
     @Body() plantaProceso: PlantaProceso,
+    @GetUser() usuario: Usuario,
   ): Promise<PlantaProceso> {
-    return await this._plantaProcesoService.create(generadorId, plantaProceso);
+    return await this._plantaProcesoService.create(
+      generadorId,
+      plantaProceso,
+      usuario,
+    );
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() plantaProceso: PlantaProceso,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._plantaProcesoService.update(id, plantaProceso);
+    return await this._plantaProcesoService.update(id, plantaProceso, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._plantaProcesoService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._plantaProcesoService.delete(id, usuario);
   }
 }

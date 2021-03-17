@@ -10,6 +10,8 @@ import { PlantaProceso } from './planta-proceso.entity';
 
 import { GeneradorService } from '../generador/generador.service';
 import { Generador } from '../generador/generador.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class PlantaProcesoService {
@@ -46,29 +48,48 @@ export class PlantaProcesoService {
   async create(
     generadorId: number,
     plantaProceso: PlantaProceso,
+    usuario: Usuario,
   ): Promise<PlantaProceso> {
     const generador: Generador = await this._generadorService.get(generadorId);
     plantaProceso.Generador = generador;
+
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     const savedPlantaProceso: PlantaProceso = await this._plantaProcesoRepository.save(
       plantaProceso,
+      saveOptions,
     );
     return savedPlantaProceso;
   }
 
-  async update(id: number, plantaProceso: PlantaProceso): Promise<void> {
+  async update(
+    id: number,
+    plantaProceso: PlantaProceso,
+    usuario: Usuario,
+  ): Promise<void> {
     let plantaProcesoDB = await this._plantaProcesoRepository.findOne(id);
 
     plantaProcesoDB.nombre = plantaProceso.nombre;
     plantaProcesoDB.Generador = plantaProceso.Generador;
 
-    await plantaProcesoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await plantaProcesoDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let plantaProcesoDB = await this._plantaProcesoRepository.findOne(id);
 
     plantaProcesoDB.status = status.INACTIVE;
 
-    await plantaProcesoDB.save();
+    const saveoptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await plantaProcesoDB.save(saveoptions);
   }
 }

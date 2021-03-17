@@ -36,6 +36,7 @@ export class TipoResiduoSubscriber
     tipoResiduo_aditoria.nombre = tipoResiduo.nombre;
     tipoResiduo_aditoria.descripcion = tipoResiduo.descripcion;
     tipoResiduo_aditoria.status_Residuo = tipoResiduo.status;
+    tipoResiduo_aditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaTipoResiduoRepository.save(tipoResiduo_aditoria);
   }

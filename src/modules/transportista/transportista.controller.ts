@@ -13,6 +13,8 @@ import { TransportistaService } from './transportista.service';
 import { Transportista } from './transportista.entity';
 import { TransportistaAuditoriaService } from './transportista-auditoria/transportista-auditoria.service';
 import { TransportistaAuditoria } from './transportista-auditoria/transportista-auditoria.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Controller('transportista')
 export class TransportistaController {
@@ -44,20 +46,27 @@ export class TransportistaController {
   }
 
   @Post()
-  async create(@Body() transportista: Transportista): Promise<Transportista> {
-    return await this._transportistaService.create(transportista);
+  async create(
+    @Body() transportista: Transportista,
+    @GetUser() usuario: Usuario,
+  ): Promise<Transportista> {
+    return await this._transportistaService.create(transportista, usuario);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() transportista: Transportista,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._transportistaService.update(id, transportista);
+    return await this._transportistaService.update(id, transportista, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._transportistaService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._transportistaService.delete(id, usuario);
   }
 }

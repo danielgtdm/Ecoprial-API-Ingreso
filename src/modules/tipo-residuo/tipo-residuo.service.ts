@@ -8,6 +8,8 @@ import { status } from '../../shared/entity-status.enum';
 
 import { TipoResiduoRepository } from './tipo-residuo.repository';
 import { TipoResiduo } from './tipo-residuo.entity';
+import { SaveOptions } from 'typeorm';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Injectable()
 export class TipoResiduoService {
@@ -41,15 +43,27 @@ export class TipoResiduoService {
     return tiposResidio;
   }
 
-  async create(tipoResiduo: TipoResiduo): Promise<TipoResiduo> {
+  async create(
+    tipoResiduo: TipoResiduo,
+    usuario: Usuario,
+  ): Promise<TipoResiduo> {
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     const savedTipoResiduo: TipoResiduo = await this._tipoResiduoRepository.save(
       tipoResiduo,
+      saveOptions,
     );
 
     return savedTipoResiduo;
   }
 
-  async update(id: number, tipoResiduo: TipoResiduo): Promise<void> {
+  async update(
+    id: number,
+    tipoResiduo: TipoResiduo,
+    usuario: Usuario,
+  ): Promise<void> {
     let tipoResiduoDB: TipoResiduo = await this._tipoResiduoRepository.findOne(
       id,
     );
@@ -57,16 +71,24 @@ export class TipoResiduoService {
     tipoResiduoDB.nombre = tipoResiduo.nombre;
     tipoResiduoDB.descripcion = tipoResiduo.descripcion;
 
-    await tipoResiduoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await tipoResiduoDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let tipoResiduoDB: TipoResiduo = await this._tipoResiduoRepository.findOne(
       id,
     );
 
     tipoResiduoDB.status = status.INACTIVE;
 
-    await tipoResiduoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await tipoResiduoDB.save(saveOptions);
   }
 }

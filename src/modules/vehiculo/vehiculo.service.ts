@@ -9,6 +9,8 @@ import { Vehiculo } from './vehiculo.entity';
 import { status } from '../../shared/entity-status.enum';
 import { TransportistaService } from '../transportista/transportista.service';
 import { Transportista } from '../transportista/transportista.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class VehiculoService {
@@ -42,33 +44,54 @@ export class VehiculoService {
     return vehiculos;
   }
 
-  async create(transportistaId: number, vehiculo: Vehiculo): Promise<Vehiculo> {
+  async create(
+    transportistaId: number,
+    vehiculo: Vehiculo,
+    usuario: Usuario,
+  ): Promise<Vehiculo> {
     const transportista: Transportista = await this._transportistaService.get(
       transportistaId,
     );
 
     vehiculo.Transportista = transportista;
 
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     const savedVehiculo: Vehiculo = await this._vehiculoRepository.save(
       vehiculo,
+      saveOptions,
     );
     return savedVehiculo;
   }
 
-  async update(id: number, vehiculo: Vehiculo): Promise<void> {
+  async update(
+    id: number,
+    vehiculo: Vehiculo,
+    usuario: Usuario,
+  ): Promise<void> {
     let vehiculoDB: Vehiculo = await this._vehiculoRepository.findOne(id);
 
     vehiculoDB.patente = vehiculo.patente;
     vehiculoDB.Transportista = vehiculo.Transportista;
 
-    await vehiculoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await vehiculoDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let vehiculoDB: Vehiculo = await this._vehiculoRepository.findOne(id);
 
     vehiculoDB.status = status.INACTIVE;
 
-    await vehiculoDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await vehiculoDB.save(saveOptions);
   }
 }

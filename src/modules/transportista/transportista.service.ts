@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { status } from '../../shared/entity-status.enum';
 import { TransportistaRepository } from './transportista.repository';
 import { Transportista } from './transportista.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class TransportistaService {
@@ -40,14 +42,30 @@ export class TransportistaService {
     return transportistas;
   }
 
-  async create(transportista: Transportista): Promise<Transportista> {
+  async create(
+    transportista: Transportista,
+    usuario: Usuario,
+  ): Promise<Transportista> {
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     const savedTransportista: Transportista = await this._transportistaRepository.save(
       transportista,
+      saveOptions,
     );
     return savedTransportista;
   }
 
-  async update(id: number, transportista: Transportista): Promise<void> {
+  async update(
+    id: number,
+    transportista: Transportista,
+    usuario: Usuario,
+  ): Promise<void> {
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     let transportistaDB: Transportista = await this._transportistaRepository.findOne(
       id,
     );
@@ -56,16 +74,20 @@ export class TransportistaService {
     transportistaDB.rut = transportista.rut;
     transportistaDB.descripcion = transportista.descripcion;
 
-    await transportistaDB.save();
+    await transportistaDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let transportistaDB: Transportista = await this._transportistaRepository.findOne(
       id,
     );
 
     transportistaDB.status = status.INACTIVE;
 
-    await transportistaDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await transportistaDB.save(saveOptions);
   }
 }

@@ -12,6 +12,7 @@ import { PlantaProcesoAuditoria } from '../../planta-proceso/planta-proceso-audi
 import { ResiduoAuditoria } from '../../residuo/residuo-auditoria/residuo-auditoria.entity';
 import { VehiculoAuditoria } from '../../vehiculo/vehiculo-auditoria/vehiculo-auditoria.entity';
 import { ConductorAuditoria } from '../../conductor/conductor-auditoria/conductor-auditoria.entity';
+import { Usuario } from '../../usuario/usuario.entity';
 
 @Entity('ingreso_auditoria')
 export class IngresoAuditoria extends BaseEntity {
@@ -78,6 +79,12 @@ export class IngresoAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', length: 8 })
   status_Ingreso: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Residuo } from '../residuo.entity';
 import { TipoResiduoAuditoria } from '../../tipo-residuo/tipo-residuo-auditoria/tipo-residuo-auditoria.entity';
+import { Usuario } from '../../usuario/usuario.entity';
 
 @Entity('residuo_auditoria')
 export class ResiduoAuditoria extends BaseEntity {
@@ -21,28 +22,28 @@ export class ResiduoAuditoria extends BaseEntity {
   })
   id_Residuo: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   cantidad: number;
 
   @Column({ type: 'integer', nullable: false })
   celda: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   humedad: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   pH: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   temperatura: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   conductividad_electrica: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   salinidad: number;
 
-  @Column({ type: 'double', nullable: false })
+  @Column({ type: 'double', nullable: true })
   tds: number;
 
   @ManyToOne(
@@ -57,6 +58,12 @@ export class ResiduoAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', length: 8 })
   status_Residuo: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

@@ -24,7 +24,7 @@ export class Ingreso extends BaseEntity {
   @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
-  @Column({ type: 'integer', nullable: false, unique: true })
+  @Column({ type: 'integer', nullable: false })
   nro_guia: number;
 
   @Column({

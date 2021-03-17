@@ -51,6 +51,7 @@ export class VehiculoSubscriber implements EntitySubscriberInterface<Vehiculo> {
     vehiculo_auditoria.patente = vehiculo.patente;
     vehiculo_auditoria.id_Auditoria_Transportista = transportista_auditoria.id; //reemplazar por la auditoria
     vehiculo_auditoria.status_Vehiculo = vehiculo.status;
+    vehiculo_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaVehiculoRepository.save(vehiculo_auditoria);
   }

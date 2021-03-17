@@ -13,6 +13,8 @@ import { IngresoService } from './ingreso.service';
 import { Ingreso } from './ingreso.entity';
 import { IngresoAuditoriaService } from './ingreso-auditoria/ingreso-auditoria.service';
 import { IngresoAuditoria } from './ingreso-auditoria/ingreso-auditoria.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
 
 @Controller('ingreso')
 export class IngresoController {
@@ -49,12 +51,14 @@ export class IngresoController {
     @Param('vehiculoId', ParseIntPipe) vehiculoId: number,
     @Param('conductorId', ParseIntPipe) conductorId: number,
     @Body() ingreso: Ingreso,
+    @GetUser() usuario: Usuario,
   ): Promise<Ingreso> {
     return await this._ingresoService.create(
       plantaProcesoId,
       vehiculoId,
       conductorId,
       ingreso,
+      usuario,
     );
   }
 
@@ -62,12 +66,16 @@ export class IngresoController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() ingreso: Ingreso,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._ingresoService.update(id, ingreso);
+    return await this._ingresoService.update(id, ingreso, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._ingresoService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._ingresoService.delete(id, usuario);
   }
 }

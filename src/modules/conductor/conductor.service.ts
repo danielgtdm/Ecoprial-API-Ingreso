@@ -84,11 +84,15 @@ export class ConductorService {
     await conductorDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let conductorDB: Conductor = await this._conductorRepository.findOne(id);
 
     conductorDB.status = status.INACTIVE;
 
-    await conductorDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await conductorDB.save(saveOptions);
   }
 }

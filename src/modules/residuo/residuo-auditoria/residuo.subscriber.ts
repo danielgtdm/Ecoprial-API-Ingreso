@@ -56,6 +56,7 @@ export class ResiduoSubscriber implements EntitySubscriberInterface<Residuo> {
     residuo_auditoria.temperatura = residuo.temperatura;
     residuo_auditoria.tds = residuo.tds;
     residuo_auditoria.status_Residuo = residuo.status;
+    residuo_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaResiduoRepository.save(residuo_auditoria);
   }
