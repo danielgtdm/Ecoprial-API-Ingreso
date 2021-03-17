@@ -54,6 +54,7 @@ export class ConductorSubscriber
     conductor_auditoria.apellido = conductor.apellido;
     conductor_auditoria.id_Auditoria_Transportista = transportista_auditoria.id;
     conductor_auditoria.status_Conductor = conductor.status;
+    conductor_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaConductorRepository.save(conductor_auditoria);
   }

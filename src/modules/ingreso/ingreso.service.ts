@@ -85,6 +85,13 @@ export class IngresoService {
     const conductor: Conductor = await this._conductorService.get(conductorId);
     ingreso.Conductor = conductor;
 
+    // GENERAR NRO DE REPORT AUTOINCREMENTABLE
+
+    // const latestIngreso = await this._ingresoRepository.findOne({
+    //   order: { id: 'DESC' },
+    // });
+    // ingreso.nro_report = latestIngreso.nro_report + 1;
+
     const savedIngreso: Ingreso = await this._ingresoRepository.save(ingreso);
 
     return savedIngreso;

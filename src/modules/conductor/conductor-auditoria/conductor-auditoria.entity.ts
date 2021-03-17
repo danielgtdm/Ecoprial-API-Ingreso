@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Conductor } from '../conductor.entity';
 import { TransportistaAuditoria } from '../../transportista/transportista-auditoria/transportista-auditoria.entity';
+import { Usuario } from '../../usuario/usuario.entity';
 
 @Entity('conductor_auditoria')
 export class ConductorAuditoria extends BaseEntity {
@@ -39,6 +40,12 @@ export class ConductorAuditoria extends BaseEntity {
 
   @Column({ type: 'varchar', length: 8 })
   status_Conductor: string;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.id, {
+    nullable: false,
+    eager: true,
+  })
+  id_Usuario: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

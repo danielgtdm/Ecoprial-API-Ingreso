@@ -24,10 +24,14 @@ export class Ingreso extends BaseEntity {
   @Column({ type: 'datetime', nullable: true })
   salida: Date;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer', nullable: false, unique: true })
   nro_guia: number;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({
+    type: 'integer',
+    nullable: false,
+    unique: true,
+  })
   nro_report: number;
 
   @ManyToOne(() => PlantaProceso, (plantaProceso) => plantaProceso.Ingresos, {

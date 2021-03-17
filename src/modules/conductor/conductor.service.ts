@@ -9,6 +9,8 @@ import { ConductorRepository } from './conductor.repository';
 import { status } from '../../shared/entity-status.enum';
 import { TransportistaService } from '../transportista/transportista.service';
 import { Transportista } from '../transportista/transportista.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class ConductorService {
@@ -45,6 +47,7 @@ export class ConductorService {
   async create(
     conductor: Conductor,
     transportistaId: number,
+    usuario: Usuario,
   ): Promise<Conductor> {
     const transportista: Transportista = await this._transportistaService.get(
       transportistaId,
@@ -52,20 +55,33 @@ export class ConductorService {
 
     conductor.Transportista = transportista;
 
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
     const createdConductor: Conductor = await this._conductorRepository.save(
       conductor,
+      saveOptions,
     );
     return createdConductor;
   }
 
-  async update(id: number, conductor: Conductor): Promise<void> {
+  async update(
+    id: number,
+    conductor: Conductor,
+    usuario: Usuario,
+  ): Promise<void> {
     let conductorDB: Conductor = await this._conductorRepository.findOne(id);
 
     conductorDB.nombre = conductor.nombre;
     conductorDB.apellido = conductor.apellido;
     conductorDB.Transportista = conductor.Transportista;
 
-    await conductorDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await conductorDB.save(saveOptions);
   }
 
   async delete(id: number): Promise<void> {
