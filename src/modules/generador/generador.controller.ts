@@ -13,6 +13,8 @@ import { GeneradorService } from './generador.service';
 import { Generador } from './generador.entity';
 import { GeneradorAuditoriaService } from './generador-auditoria/generador-auditoria.service';
 import { GeneradorAuditoria } from './generador-auditoria/generador-auditoria.entity';
+import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { Usuario } from '../usuario/usuario.entity';
 
 @Controller('generador')
 export class GeneradorController {
@@ -44,20 +46,27 @@ export class GeneradorController {
   }
 
   @Post()
-  async create(@Body() generador: Generador): Promise<Generador> {
-    return await this._generadorService.create(generador);
+  async create(
+    @Body() generador: Generador,
+    @GetUser() usuario: Usuario,
+  ): Promise<Generador> {
+    return await this._generadorService.create(generador, usuario);
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() generador: Generador,
+    @GetUser() usuario: Usuario,
   ): Promise<void> {
-    return await this._generadorService.update(id, generador);
+    return await this._generadorService.update(id, generador, usuario);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return await this._generadorService.delete(id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() usuario: Usuario,
+  ): Promise<void> {
+    return await this._generadorService.delete(id, usuario);
   }
 }

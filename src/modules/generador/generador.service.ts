@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { status } from '../../shared/entity-status.enum';
 import { GeneradorRepository } from './generador.repository';
 import { Generador } from './generador.entity';
+import { Usuario } from '../usuario/usuario.entity';
+import { SaveOptions } from 'typeorm';
 
 @Injectable()
 export class GeneradorService {
@@ -38,28 +40,44 @@ export class GeneradorService {
     return generadores;
   }
 
-  async create(generador: Generador): Promise<Generador> {
+  async create(generador: Generador, usuario: Usuario): Promise<Generador> {
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
     const savedGenerador: Generador = await this._generadorRepository.save(
       generador,
+      saveOptions,
     );
 
     return savedGenerador;
   }
 
-  async update(id: number, generador: Generador): Promise<void> {
+  async update(
+    id: number,
+    generador: Generador,
+    usuario: Usuario,
+  ): Promise<void> {
     let generadorDB: Generador = await this._generadorRepository.findOne(id);
 
     generadorDB.nombre = generador.nombre;
     generadorDB.rut = generador.rut;
 
-    await generadorDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await generadorDB.save(saveOptions);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuario: Usuario): Promise<void> {
     let generadorDB: Generador = await this._generadorRepository.findOne(id);
 
     generadorDB.status = status.INACTIVE;
 
-    await generadorDB.save();
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    await generadorDB.save(saveOptions);
   }
 }

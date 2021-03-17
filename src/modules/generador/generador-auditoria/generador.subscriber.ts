@@ -36,6 +36,7 @@ export class GeneradorSubscriber
     generador_auditoria.nombre = generador.nombre;
     generador_auditoria.rut = generador.rut;
     generador_auditoria.status_Generador = generador.status;
+    generador_auditoria.id_Usuario = event.queryRunner.data.id;
 
     await auditoriaGeneradorRepository.save(generador_auditoria);
   }
