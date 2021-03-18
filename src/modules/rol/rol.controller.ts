@@ -7,10 +7,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from './decorators/rol.decorator';
+import { RolGuard } from './guards/rol.guard';
 import { Rol } from './rol.entity';
 import { RolService } from './rol.service';
 
+@Roles('ADMINISTRADOR')
+@UseGuards(AuthGuard(), RolGuard)
 @Controller('rol')
 export class RolController {
   constructor(private readonly _rolService: RolService) {}

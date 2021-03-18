@@ -20,6 +20,7 @@ import { Roles } from '../rol/decorators/rol.decorator';
 import { GetUser } from '../usuario/decorators/usuario.decorator';
 import { Usuario } from '../usuario/usuario.entity';
 
+@UseGuards(AuthGuard())
 @Controller('conductor')
 export class ConductorController {
   constructor(
@@ -27,6 +28,8 @@ export class ConductorController {
     private readonly _conductorAuditoriaService: ConductorAuditoriaService,
   ) {}
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria/:conductorId')
   async getAuditoriasConductor(
     @Param('conductorId', ParseIntPipe) conductorId: number,
@@ -34,6 +37,8 @@ export class ConductorController {
     return await this._conductorAuditoriaService.get(conductorId);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria')
   async getAuditorias(): Promise<ConductorAuditoria[]> {
     return await this._conductorAuditoriaService.getAll();
@@ -50,8 +55,8 @@ export class ConductorController {
   }
 
   @Post(':transportistaId')
-  // @Roles('ADMINISTRADOR')
-  // @UseGuards(AuthGuard(), RolGuard)
+  @Roles('ADMINISTRADOR', 'PORTERIA')
+  @UseGuards(RolGuard)
   async create(
     @Param('transportistaId', ParseIntPipe) transportistaId: number,
     @Body() conductor: Conductor,
@@ -65,8 +70,8 @@ export class ConductorController {
   }
 
   @Patch(':id')
-  // @Roles('ADMINISTRADOR')
-  // @UseGuards(AuthGuard(), RolGuard)
+  @Roles('ADMINISTRADOR', 'PORTERIA')
+  @UseGuards(RolGuard)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() conductor: Conductor,
@@ -75,6 +80,8 @@ export class ConductorController {
     return await this._conductorService.update(id, conductor, usuario);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,

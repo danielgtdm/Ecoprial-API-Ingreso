@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { IngresoService } from './ingreso.service';
@@ -15,7 +16,11 @@ import { IngresoAuditoriaService } from './ingreso-auditoria/ingreso-auditoria.s
 import { IngresoAuditoria } from './ingreso-auditoria/ingreso-auditoria.entity';
 import { Usuario } from '../usuario/usuario.entity';
 import { GetUser } from '../usuario/decorators/usuario.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../rol/decorators/rol.decorator';
+import { RolGuard } from '../rol/guards/rol.guard';
 
+@UseGuards(AuthGuard())
 @Controller('ingreso')
 export class IngresoController {
   constructor(
@@ -23,6 +28,8 @@ export class IngresoController {
     private readonly _ingresoAuditoriaService: IngresoAuditoriaService,
   ) {}
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria/:ingresoId')
   async getAuditoriasIngreso(
     @Param('ingresoId', ParseIntPipe) ingresoId: number,
@@ -30,6 +37,8 @@ export class IngresoController {
     return await this._ingresoAuditoriaService.get(ingresoId);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria')
   async getAuditorias(): Promise<IngresoAuditoria[]> {
     return await this._ingresoAuditoriaService.getAll();
@@ -45,6 +54,8 @@ export class IngresoController {
     return await this._ingresoService.getAll();
   }
 
+  @Roles('ADMINISTRADOR', 'PORTERIA')
+  @UseGuards(RolGuard)
   @Post(':plantaProcesoId/:vehiculoId/:conductorId')
   async create(
     @Param('plantaProcesoId', ParseIntPipe) plantaProcesoId: number,
@@ -62,6 +73,8 @@ export class IngresoController {
     );
   }
 
+  @Roles('ADMINISTRADOR', 'PORTERIA')
+  @UseGuards(RolGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -71,6 +84,8 @@ export class IngresoController {
     return await this._ingresoService.update(id, ingreso, usuario);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,

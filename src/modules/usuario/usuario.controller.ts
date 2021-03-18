@@ -15,6 +15,8 @@ import { RolGuard } from '../rol/guards/rol.guard';
 import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
 
+@Roles('ADMINISTRADOR')
+@UseGuards(AuthGuard(), RolGuard)
 @Controller('usuario')
 export class UsuarioController {
   constructor(private readonly _usuarioService: UsuarioService) {}
@@ -25,8 +27,6 @@ export class UsuarioController {
   }
 
   @Get()
-  // @Roles('ADMINISTRADOR')
-  // @UseGuards(AuthGuard(), RolGuard)
   async getAll(): Promise<Usuario[]> {
     return await this._usuarioService.getAll();
   }
