@@ -5,9 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TipoResiduoRepository } from './tipo-residuo.repository';
 import { TipoResiduoAuditoriaModule } from './tipo-residuo-auditoria/tipo-residuo-auditoria.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TipoResiduoRepository]), TipoResiduoAuditoriaModule],
+  imports: [
+    TypeOrmModule.forFeature([TipoResiduoRepository]),
+    TipoResiduoAuditoriaModule,
+    AuthModule,
+  ],
   controllers: [TipoResiduoController],
   providers: [TipoResiduoService],
   exports: [TipoResiduoService],

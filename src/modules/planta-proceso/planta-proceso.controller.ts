@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { PlantaProcesoService } from './planta-proceso.service';
@@ -15,7 +16,11 @@ import { PlantaProcesoAuditoriaService } from './planta-proceso-auditoria/planta
 import { PlantaProcesoAuditoria } from './planta-proceso-auditoria/planta-proceso-auditoria.entity';
 import { GetUser } from '../usuario/decorators/usuario.decorator';
 import { Usuario } from '../usuario/usuario.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../rol/decorators/rol.decorator';
+import { RolGuard } from '../rol/guards/rol.guard';
 
+@UseGuards(AuthGuard())
 @Controller('planta-proceso')
 export class PlantaProcesoController {
   constructor(
@@ -23,6 +28,8 @@ export class PlantaProcesoController {
     private readonly _plantaProcesoAuditoriaService: PlantaProcesoAuditoriaService,
   ) {}
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria/:plantaProcesoId')
   async getAuditoriasPlantaProceso(
     @Param('plantaProcesoId', ParseIntPipe) plantaProcesoId: number,
@@ -30,6 +37,8 @@ export class PlantaProcesoController {
     return await this._plantaProcesoAuditoriaService.get(plantaProcesoId);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria')
   async getAuditorias(): Promise<PlantaProcesoAuditoria[]> {
     return await this._plantaProcesoAuditoriaService.getAll();
@@ -45,6 +54,8 @@ export class PlantaProcesoController {
     return await this._plantaProcesoService.getAll();
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Post(':generadorId')
   async create(
     @Param('generadorId', ParseIntPipe) generadorId: number,
@@ -58,6 +69,8 @@ export class PlantaProcesoController {
     );
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -67,6 +80,8 @@ export class PlantaProcesoController {
     return await this._plantaProcesoService.update(id, plantaProceso, usuario);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,

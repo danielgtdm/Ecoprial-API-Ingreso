@@ -15,6 +15,7 @@ import { ResiduoModule } from '../residuo/residuo.module';
 
 import { TipoResiduoModule } from '../tipo-residuo/tipo-residuo.module';
 import { IngresoAuditoriaModule } from './ingreso-auditoria/ingreso-auditoria.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { IngresoAuditoriaModule } from './ingreso-auditoria/ingreso-auditoria.mo
     ResiduoModule,
     IngresoAuditoriaModule,
     TipoResiduoModule,
+    AuthModule,
   ],
   controllers: [IngresoController],
   providers: [IngresoService],

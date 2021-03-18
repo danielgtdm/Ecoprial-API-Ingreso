@@ -6,12 +6,14 @@ import { VehiculoRepository } from './vehiculo.repository';
 
 import { TransportistaModule } from '../transportista/transportista.module';
 import { VehiculoAuditoriaModule } from './vehiculo-auditoria/vehiculo-auditoria.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([VehiculoRepository]),
     TransportistaModule,
     VehiculoAuditoriaModule,
+    AuthModule,
   ],
   controllers: [VehiculoController],
   providers: [VehiculoService],

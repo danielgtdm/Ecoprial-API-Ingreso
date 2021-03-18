@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { GeneradorService } from './generador.service';
@@ -15,7 +16,11 @@ import { GeneradorAuditoriaService } from './generador-auditoria/generador-audit
 import { GeneradorAuditoria } from './generador-auditoria/generador-auditoria.entity';
 import { GetUser } from '../usuario/decorators/usuario.decorator';
 import { Usuario } from '../usuario/usuario.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../rol/decorators/rol.decorator';
+import { RolGuard } from '../rol/guards/rol.guard';
 
+@UseGuards(AuthGuard())
 @Controller('generador')
 export class GeneradorController {
   constructor(
@@ -23,6 +28,8 @@ export class GeneradorController {
     private readonly _generadorAuditoriaService: GeneradorAuditoriaService,
   ) {}
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria/:generadorId')
   async getAuditoriasGenerador(
     @Param('generadorId', ParseIntPipe) generadorId: number,
@@ -30,6 +37,8 @@ export class GeneradorController {
     return await this._generadorAuditoriaService.get(generadorId);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Get('auditoria')
   async getAuditorias(): Promise<GeneradorAuditoria[]> {
     return await this._generadorAuditoriaService.getAll();
@@ -45,6 +54,8 @@ export class GeneradorController {
     return await this._generadorService.getAll();
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Post()
   async create(
     @Body() generador: Generador,
@@ -53,6 +64,8 @@ export class GeneradorController {
     return await this._generadorService.create(generador, usuario);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -62,6 +75,8 @@ export class GeneradorController {
     return await this._generadorService.update(id, generador, usuario);
   }
 
+  @Roles('ADMINISTRADOR')
+  @UseGuards(RolGuard)
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,

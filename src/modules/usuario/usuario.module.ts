@@ -11,6 +11,7 @@ import { UsuarioService } from './usuario.service';
     TypeOrmModule.forFeature([UsuarioRepository]),
     AuthModule,
     RolModule,
+    AuthModule,
   ],
   controllers: [UsuarioController],
   providers: [UsuarioService],
