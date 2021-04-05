@@ -153,6 +153,7 @@ export class IngresoService {
       data: usuario,
     };
 
+    await this._residuoService.delete(ingresoDB.Residuo.id, usuario);
     await ingresoDB.save(saveOptions);
   }
 }
