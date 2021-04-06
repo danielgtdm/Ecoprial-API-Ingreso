@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -46,6 +47,10 @@ export class TransportistaService {
     transportista: Transportista,
     usuario: Usuario,
   ): Promise<Transportista> {
+    const exist: Transportista = await this._transportistaRepository.findOne({where: {rut: transportista.rut} && {status: status.ACTIVE}});
+    if(exist){
+      throw new ConflictException();
+    }
     const saveOptions: SaveOptions = {
       data: usuario,
     };

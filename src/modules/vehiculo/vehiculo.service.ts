@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -49,6 +50,10 @@ export class VehiculoService {
     vehiculo: Vehiculo,
     usuario: Usuario,
   ): Promise<Vehiculo> {
+    const exist: Vehiculo = await this._vehiculoRepository.findOne({where: {patente: vehiculo.patente} && {status: status.ACTIVE}});
+    if(exist){
+      throw new ConflictException();
+    }
     const transportista: Transportista = await this._transportistaService.get(
       transportistaId,
     );

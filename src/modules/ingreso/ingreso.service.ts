@@ -21,6 +21,8 @@ import { TipoResiduo } from '../tipo-residuo/tipo-residuo.entity';
 import { SaveOptions } from 'typeorm';
 import { Usuario } from '../usuario/usuario.entity';
 import { TipoResiduoService } from '../tipo-residuo/tipo-residuo.service';
+import { BusquedaFecha } from './busqueda-fecha';
+import { BusquedaFechaRango } from './busqueda-fecha-rango';
 
 @Injectable()
 export class IngresoService {
@@ -55,6 +57,26 @@ export class IngresoService {
       where: { status: status.ACTIVE },
     });
 
+    return ingresos;
+  }
+
+  async getByDate(busquedaFecha: BusquedaFecha){
+    const ingresosOnDate: Ingreso[] = await this._ingresoRepository.createQueryBuilder("ingreso").where(`ingreso.status = 'ACTIVE' AND (DATE(ingreso.entrada) = '${busquedaFecha.fecha}')`).getMany();
+    let ingresos: Ingreso[] = [];
+    for (let i = 0; i < ingresosOnDate.length; i++) {
+      const ingreso = ingresosOnDate[i];
+      ingresos.push(await this.get(ingreso.id));
+    }
+    return ingresos;
+  }
+
+  async getByDateInRange(busquedaFechaRango: BusquedaFechaRango){
+    const ingresosOnDate: Ingreso[] = await this._ingresoRepository.createQueryBuilder("ingreso").where(`ingreso.status = 'ACTIVE' AND (DATE(ingreso.entrada) BETWEEN '${busquedaFechaRango.inicio}' AND '${busquedaFechaRango.fin}')`).getMany();  
+    let ingresos: Ingreso[] = [];
+    for (let i = 0; i < ingresosOnDate.length; i++) {
+      const ingreso = ingresosOnDate[i];
+      ingresos.push(await this.get(ingreso.id));
+    }
     return ingresos;
   }
 

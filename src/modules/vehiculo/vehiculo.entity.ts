@@ -18,7 +18,7 @@ export class Vehiculo extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   patente: string;
 
   @ManyToOne(() => Transportista, (transportista) => transportista.Vehiculos, {

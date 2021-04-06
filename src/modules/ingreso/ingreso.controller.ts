@@ -19,6 +19,8 @@ import { GetUser } from '../usuario/decorators/usuario.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../rol/decorators/rol.decorator';
 import { RolGuard } from '../rol/guards/rol.guard';
+import { BusquedaFecha } from './busqueda-fecha';
+import { BusquedaFechaRango } from './busqueda-fecha-rango';
 
 @UseGuards(AuthGuard())
 @Controller('ingreso')
@@ -71,6 +73,16 @@ export class IngresoController {
       ingreso,
       usuario,
     );
+  }
+
+  @Post('/encontrar-fecha')
+  async getByDate(@Body() busquedaFecha: BusquedaFecha){
+    return await this._ingresoService.getByDate(busquedaFecha);
+  }
+
+  @Post('/encontrar-fecha-rango')
+  async getByDateInRange(@Body() busquedaFechaRango: BusquedaFechaRango){
+    return await this._ingresoService.getByDateInRange(busquedaFechaRango);
   }
 
   @Roles('ADMINISTRADOR', 'PORTERIA')

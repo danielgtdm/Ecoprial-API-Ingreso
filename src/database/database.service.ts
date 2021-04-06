@@ -21,7 +21,7 @@ export const databaseProviders = [
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         subscribers: [__dirname + '/../**/*.subscriber.{js,ts}'],
         migrations: [__dirname + '/migrations/*.{ts,js}'],
-        synchronize: false,
+        synchronize: true,
       } as ConnectionOptions;
     },
   }),

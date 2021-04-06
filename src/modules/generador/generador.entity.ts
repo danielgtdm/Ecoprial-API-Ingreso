@@ -18,7 +18,7 @@ export class Generador extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   nombre: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', nullable: false, unique: true })
   rut: string;
 
   @OneToMany(() => PlantaProceso, (plantaProceso) => plantaProceso.Generador)
