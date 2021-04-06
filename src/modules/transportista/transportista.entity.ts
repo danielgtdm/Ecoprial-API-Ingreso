@@ -19,7 +19,7 @@ export class Transportista extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   nombre: string;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
+  @Column({ type: 'varchar', nullable: false})
   rut: string;
 
   @Column({ type: 'varchar', nullable: true })

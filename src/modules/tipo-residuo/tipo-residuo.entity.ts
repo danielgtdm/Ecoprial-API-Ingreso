@@ -15,7 +15,7 @@ export class TipoResiduo extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
+  @Column({ type: 'varchar', nullable: false})
   nombre: string;
 
   @Column({ type: 'varchar', nullable: true })
