@@ -46,6 +46,11 @@ export class IngresoController {
     return await this._ingresoAuditoriaService.getAll();
   }
 
+  @Get('/en-planta')
+  async getEnPlanta(): Promise<Ingreso[]>{
+    return await this._ingresoService.getEnPlanta();
+  }
+
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Ingreso> {
     return await this._ingresoService.get(id);

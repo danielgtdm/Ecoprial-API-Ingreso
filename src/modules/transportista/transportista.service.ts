@@ -47,7 +47,7 @@ export class TransportistaService {
     transportista: Transportista,
     usuario: Usuario,
   ): Promise<Transportista> {
-    const exist: Transportista = await this._transportistaRepository.findOne({where: {rut: transportista.rut} && {status: status.ACTIVE}});
+    const exist: Transportista = await this._transportistaRepository.findOne({where: {rut: transportista.rut, status: status.ACTIVE}});
     if(exist){
       throw new ConflictException();
     }

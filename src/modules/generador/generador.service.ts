@@ -42,7 +42,7 @@ export class GeneradorService {
   }
 
   async create(generador: Generador, usuario: Usuario): Promise<Generador> {
-    const exist: Generador = await this._generadorRepository.findOne({where: {rut: generador.rut} && {status: status.ACTIVE}});
+    const exist: Generador = await this._generadorRepository.findOne({where: {rut: generador.rut, status: status.ACTIVE}});
     if(exist){
       throw new ConflictException();
     }

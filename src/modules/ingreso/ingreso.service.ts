@@ -18,7 +18,7 @@ import { Conductor } from '../conductor/conductor.entity';
 import { ResiduoService } from '../residuo/residuo.service';
 import { Residuo } from '../residuo/residuo.entity';
 import { TipoResiduo } from '../tipo-residuo/tipo-residuo.entity';
-import { SaveOptions } from 'typeorm';
+import { IsNull, SaveOptions } from 'typeorm';
 import { Usuario } from '../usuario/usuario.entity';
 import { TipoResiduoService } from '../tipo-residuo/tipo-residuo.service';
 import { BusquedaFecha } from './busqueda-fecha';
@@ -77,6 +77,12 @@ export class IngresoService {
       const ingreso = ingresosOnDate[i];
       ingresos.push(await this.get(ingreso.id));
     }
+    return ingresos;
+  }
+
+  async getEnPlanta(): Promise<Ingreso[]>{
+    const ingresos: Ingreso[] = await this._ingresoRepository.find({where: {salida: IsNull() ,status: status.ACTIVE}});
+    
     return ingresos;
   }
 

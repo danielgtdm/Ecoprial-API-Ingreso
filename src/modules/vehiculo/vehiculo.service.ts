@@ -50,7 +50,7 @@ export class VehiculoService {
     vehiculo: Vehiculo,
     usuario: Usuario,
   ): Promise<Vehiculo> {
-    const exist: Vehiculo = await this._vehiculoRepository.findOne({where: {patente: vehiculo.patente} && {status: status.ACTIVE}});
+    const exist: Vehiculo = await this._vehiculoRepository.findOne({where: {patente: vehiculo.patente, status: status.ACTIVE}});
     if(exist){
       throw new ConflictException();
     }
