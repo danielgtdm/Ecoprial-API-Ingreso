@@ -38,6 +38,14 @@ export class PlantaProcesoService {
     return plantaProceso;
   }
 
+  async getPorGenerador(id: number): Promise<PlantaProceso[]>{
+    const plantasProceso: PlantaProceso[] = await this._plantaProcesoRepository.find(
+      {where: {Generador: id, status: status.ACTIVE}}
+      );
+
+    return plantasProceso;
+  }
+
   async getAll(): Promise<PlantaProceso[]> {
     const plantasProceso: PlantaProceso[] = await this._plantaProcesoRepository.find(
       { where: { status: status.ACTIVE } },

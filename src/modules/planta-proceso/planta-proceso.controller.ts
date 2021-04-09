@@ -44,6 +44,11 @@ export class PlantaProcesoController {
     return await this._plantaProcesoAuditoriaService.getAll();
   }
 
+  @Get('por-generador/:id')
+  async getPlantasProcesoPorGenerador(@Param('id', ParseIntPipe) id: number): Promise<PlantaProceso[]>{
+    return await this._plantaProcesoService.getPorGenerador(id);
+  }
+
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<PlantaProceso> {
     return await this._plantaProcesoService.get(id);
