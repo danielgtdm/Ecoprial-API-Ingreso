@@ -16,8 +16,8 @@ import { SigninDto, SignupDto } from './dto';
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
-  @Roles('ADMINISTRADOR')
-  @UseGuards(AuthGuard(), RolGuard)
+ // @Roles('ADMINISTRADOR')
+ // @UseGuards(AuthGuard(), RolGuard)
   @Post('/signup')
   @UsePipes(ValidationPipe)
   async signup(@Body() signupDto: SignupDto): Promise<void> {
