@@ -15,8 +15,8 @@ import { RolGuard } from './guards/rol.guard';
 import { Rol } from './rol.entity';
 import { RolService } from './rol.service';
 
-@Roles('ADMINISTRADOR')
-@UseGuards(AuthGuard(), RolGuard)
+//@Roles('ADMINISTRADOR')
+//@UseGuards(AuthGuard(), RolGuard)
 @Controller('rol')
 export class RolController {
   constructor(private readonly _rolService: RolService) {}
