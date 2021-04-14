@@ -15,8 +15,8 @@ import { RolGuard } from '../rol/guards/rol.guard';
 import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
 
-//@Roles('ADMINISTRADOR')
-//@UseGuards(AuthGuard(), RolGuard)
+@Roles('ADMINISTRADOR')
+@UseGuards(AuthGuard(), RolGuard)
 @Controller('usuario')
 export class UsuarioController {
   constructor(private readonly _usuarioService: UsuarioService) {}
