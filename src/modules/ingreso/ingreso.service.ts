@@ -119,10 +119,10 @@ export class IngresoService {
 
     // GENERAR NRO DE REPORT AUTOINCREMENTABLE
 
-    const latestIngreso = await this._ingresoRepository.findOne({
-      order: { id: 'DESC' },
-    });
-    ingreso.nro_report = latestIngreso.nro_report + 1;
+    //const latestIngreso = await this._ingresoRepository.findOne({
+    //  order: { id: 'DESC' },
+    //});
+    //ingreso.nro_report = latestIngreso.nro_report + 1;
 
     const saveOptions: SaveOptions = {
       data: usuario,
