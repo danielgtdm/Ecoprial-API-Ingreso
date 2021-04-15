@@ -144,6 +144,7 @@ export class IngresoService {
     ingresoDB.salida = ingreso.salida;
     ingresoDB.Conductor = ingreso.Conductor;
     ingresoDB.PlantaProceso = ingreso.PlantaProceso;
+    ingresoDB.Vehiculo = ingreso.Vehiculo;
 
     const residuoDB: Residuo = await this._residuoService.get(
       ingreso.Residuo.id,
@@ -161,14 +162,12 @@ export class IngresoService {
     residuoDB.temperatura = ingreso.Residuo.temperatura;
     residuoDB.TipoResiduo = tipoResiduoDB;
 
-    await residuoDB.save();
-
-    ingresoDB.Vehiculo = ingreso.Vehiculo;
-
     const saveOptions: SaveOptions = {
       data: usuario,
     };
 
+    await residuoDB.save(saveOptions);
+    
     await ingresoDB.save(saveOptions);
   }
 
