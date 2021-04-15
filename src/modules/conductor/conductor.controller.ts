@@ -44,6 +44,11 @@ export class ConductorController {
     return await this._conductorAuditoriaService.getAll();
   }
 
+  @Get('por-transportista/:id')
+  async getPorTransportista(@Param('id', ParseIntPipe) transportistaId): Promise<Conductor[]>{
+    return await this._conductorService.getPorTransportista(transportistaId);
+  }
+
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Conductor> {
     return await this._conductorService.get(id);

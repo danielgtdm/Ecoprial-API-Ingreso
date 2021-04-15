@@ -36,6 +36,18 @@ export class ConductorService {
     return conductor;
   }
 
+  async getPorTransportista(transportistaId: number): Promise<Conductor[]> {
+    if (!transportistaId) {
+      throw new BadRequestException();
+    }
+
+    const conductores: Conductor[] = await this._conductorRepository.find({
+      where: { Transportista: transportistaId, status: status.ACTIVE },
+    });
+
+    return conductores;
+  }
+
   async getAll(): Promise<Conductor[]> {
     const conductores: Conductor[] = await this._conductorRepository.find({
       where: { status: status.ACTIVE },
