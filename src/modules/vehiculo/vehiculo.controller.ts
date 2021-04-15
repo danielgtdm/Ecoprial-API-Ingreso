@@ -44,6 +44,11 @@ export class VehiculoController {
     return await this._vehiculoAuditoriaService.getAll();
   }
 
+  @Get('por-transportista/:id')
+  async getPorTransportista(@Param('id', ParseIntPipe) transportistaId: number): Promise<Vehiculo[]>{
+    return await this._vehiculoService.getPorTransportista(transportistaId);
+  }
+
   @Get(':id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Vehiculo> {
     return await this._vehiculoService.get(id);

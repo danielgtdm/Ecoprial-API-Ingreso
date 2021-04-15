@@ -37,6 +37,18 @@ export class VehiculoService {
     return vehiculo;
   }
 
+  async getPorTransportista(transportistaId: number): Promise<Vehiculo[]> {
+    if (!transportistaId) {
+      throw new BadRequestException();
+    }
+
+    const vehiculos: Vehiculo[] = await this._vehiculoRepository.find({
+      where: {Transportista: transportistaId, status: status.ACTIVE },
+    });
+
+    return vehiculos;
+  }
+
   async getAll(): Promise<Vehiculo[]> {
     const vehiculos: Vehiculo[] = await this._vehiculoRepository.find({
       where: { status: status.ACTIVE },
