@@ -10,6 +10,8 @@ import { Rol } from '../rol/rol.entity';
 import { RolService } from '../rol/rol.service';
 import { Usuario } from './usuario.entity';
 import { UsuarioRepository } from './usuario.repository';
+import { genSalt, hash } from 'bcryptjs';
+
 
 @Injectable()
 export class UsuarioService {
@@ -55,7 +57,9 @@ export class UsuarioService {
     usuarioDB.nombre = usuario.nombre;
     usuarioDB.apellido = usuario.apellido;
     usuarioDB.email = usuario.email;
-    usuarioDB.password = usuario.password;
+
+    const salt = await genSalt(10);
+    usuarioDB.password = await hash(usuario.password, salt);
 
     await usuarioDB.save();
   }
