@@ -88,6 +88,14 @@ export class VehiculoService {
     vehiculo: Vehiculo,
     usuario: Usuario,
   ): Promise<void> {
+
+    const exist: Vehiculo = await this._vehiculoRepository.findOne({where: {patente: vehiculo.patente, status: status.ACTIVE}});
+    if(exist){
+      if(exist.id != id){
+        throw new ConflictException();
+      }
+    }
+
     let vehiculoDB: Vehiculo = await this._vehiculoRepository.findOne(id);
 
     vehiculoDB.patente = vehiculo.patente;

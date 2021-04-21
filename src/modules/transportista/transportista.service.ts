@@ -67,6 +67,13 @@ export class TransportistaService {
     transportista: Transportista,
     usuario: Usuario,
   ): Promise<void> {
+    const exist: Transportista = await this._transportistaRepository.findOne({where: {rut: transportista.rut, status: status.ACTIVE}});
+    if(exist){
+      if(exist.id != id){
+        throw new ConflictException();
+      }
+    }
+
     const saveOptions: SaveOptions = {
       data: usuario,
     };

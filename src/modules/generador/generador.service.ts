@@ -62,6 +62,13 @@ export class GeneradorService {
     generador: Generador,
     usuario: Usuario,
   ): Promise<void> {
+    const exist: Generador = await this._generadorRepository.findOne({where: {rut: generador.rut, status: status.ACTIVE}});
+    if(exist){
+      if(exist.id != id){
+        throw new ConflictException();
+      }
+    }
+
     let generadorDB: Generador = await this._generadorRepository.findOne(id);
 
     generadorDB.nombre = generador.nombre;

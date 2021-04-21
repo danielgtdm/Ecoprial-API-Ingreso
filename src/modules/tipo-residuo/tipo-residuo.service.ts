@@ -69,6 +69,14 @@ export class TipoResiduoService {
     tipoResiduo: TipoResiduo,
     usuario: Usuario,
   ): Promise<void> {
+
+    const exist: TipoResiduo = await this._tipoResiduoRepository.findOne({where: {nombre: tipoResiduo.nombre, status: status.ACTIVE}});
+    if(exist){
+      if(exist.id != id){
+        throw new ConflictException();
+      }
+    }
+
     let tipoResiduoDB: TipoResiduo = await this._tipoResiduoRepository.findOne(
       id,
     );
