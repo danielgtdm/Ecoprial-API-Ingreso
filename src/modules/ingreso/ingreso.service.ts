@@ -136,6 +136,56 @@ export class IngresoService {
     return savedIngreso;
   }
 
+  async createSimple(
+    plantaProcesoId: number,
+    vehiculoId: number,
+    conductorId: number,
+    ingreso: Ingreso,
+    usuario: Usuario,
+  ): Promise<Ingreso> {
+    if (!ingreso.Residuo) {
+      throw new BadRequestException();
+    }
+
+    const residuo: Residuo = ingreso.Residuo;
+    const tipoResiduo: TipoResiduo = ingreso.Residuo.TipoResiduo;
+    const savedResiduo: Residuo = await this._residuoService.create(
+      tipoResiduo.id,
+      residuo,
+      usuario,
+    );
+    ingreso.Residuo = savedResiduo;
+
+    const plantaProceso: PlantaProceso = await this._plantaProcesoService.get(
+      plantaProcesoId,
+    );
+    ingreso.PlantaProceso = plantaProceso;
+
+    const vehiculo: Vehiculo = await this._vehiculoService.get(vehiculoId);
+    ingreso.Vehiculo = vehiculo;
+
+    const conductor: Conductor = await this._conductorService.get(conductorId);
+    ingreso.Conductor = conductor;
+
+    // GENERAR NRO DE REPORT AUTOINCREMENTABLE
+
+    const latestIngreso = await this._ingresoRepository.findOne({
+      order: { id: 'DESC' },
+    });
+    ingreso.nro_report = latestIngreso.nro_report + 1;
+
+    const saveOptions: SaveOptions = {
+      data: usuario,
+    };
+
+    const savedIngreso: Ingreso = await this._ingresoRepository.save(
+      ingreso,
+      saveOptions,
+    );
+
+    return savedIngreso;
+  }
+
   async update(id: number, ingreso: Ingreso, usuario: Usuario): Promise<void> {
     let ingresoDB = await this._ingresoRepository.findOne(id);
 

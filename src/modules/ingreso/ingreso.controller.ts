@@ -80,6 +80,25 @@ export class IngresoController {
     );
   }
 
+  @Roles('ADMINISTRADOR', 'PORTERIA')
+  @UseGuards(RolGuard)
+  @Post('simple/:plantaProcesoId/:vehiculoId/:conductorId')
+  async createSimple(
+    @Param('plantaProcesoId', ParseIntPipe) plantaProcesoId: number,
+    @Param('vehiculoId', ParseIntPipe) vehiculoId: number,
+    @Param('conductorId', ParseIntPipe) conductorId: number,
+    @Body() ingreso: Ingreso,
+    @GetUser() usuario: Usuario,
+  ): Promise<Ingreso> {
+    return await this._ingresoService.createSimple(
+      plantaProcesoId,
+      vehiculoId,
+      conductorId,
+      ingreso,
+      usuario,
+    );
+  }
+
   @Post('/encontrar-fecha')
   async getByDate(@Body() busquedaFecha: BusquedaFecha){
     return await this._ingresoService.getByDate(busquedaFecha);
