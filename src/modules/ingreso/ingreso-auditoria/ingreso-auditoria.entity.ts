@@ -34,7 +34,7 @@ export class IngresoAuditoria extends BaseEntity {
   @Column({ type: 'integer', nullable: false })
   nro_guia: number;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer', nullable: true })
   nro_report: number;
 
   @ManyToOne(
