@@ -94,10 +94,13 @@ export class IngresoService {
     ingreso: Ingreso,
     usuario: Usuario,
   ): Promise<Ingreso> {
-    const reportExist: Ingreso = await this._ingresoRepository.findOne({where: {nro_report: ingreso.nro_report, status: status.ACTIVE}});
-    if(reportExist){
-      throw new ConflictException();
+    if(ingreso.nro_report != null){
+      const reportExist: Ingreso = await this._ingresoRepository.findOne({where: {nro_report: ingreso.nro_report, status: status.ACTIVE}});
+      if(reportExist){
+        throw new ConflictException();
+      }
     }
+    
     if (!ingreso.Residuo) {
       throw new BadRequestException();
     }
