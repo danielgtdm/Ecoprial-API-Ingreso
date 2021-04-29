@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -93,6 +94,10 @@ export class IngresoService {
     ingreso: Ingreso,
     usuario: Usuario,
   ): Promise<Ingreso> {
+    const reportExist: Ingreso = await this._ingresoRepository.findOne({where: {nro_report: ingreso.nro_report, status: status.ACTIVE}});
+    if(reportExist){
+      throw new ConflictException();
+    }
     if (!ingreso.Residuo) {
       throw new BadRequestException();
     }
@@ -116,13 +121,6 @@ export class IngresoService {
 
     const conductor: Conductor = await this._conductorService.get(conductorId);
     ingreso.Conductor = conductor;
-
-    // GENERAR NRO DE REPORT AUTOINCREMENTABLE
-
-    //const latestIngreso = await this._ingresoRepository.findOne({
-    //  order: { id: 'DESC' },
-    //});
-    //ingreso.nro_report = latestIngreso.nro_report + 1;
 
     const saveOptions: SaveOptions = {
       data: usuario,

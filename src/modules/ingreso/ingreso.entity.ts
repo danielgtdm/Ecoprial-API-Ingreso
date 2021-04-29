@@ -29,8 +29,7 @@ export class Ingreso extends BaseEntity {
 
   @Column({
     type: 'integer',
-    nullable: false,
-    unique: true,
+    nullable: true,
   })
   nro_report: number;
 
