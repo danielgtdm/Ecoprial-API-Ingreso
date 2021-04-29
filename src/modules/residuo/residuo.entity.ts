@@ -18,7 +18,7 @@ export class Residuo extends BaseEntity {
   @Column({ type: 'double', nullable: true })
   cantidad: number;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer', nullable: true })
   celda: number;
 
   @Column({ type: 'double', nullable: true })
